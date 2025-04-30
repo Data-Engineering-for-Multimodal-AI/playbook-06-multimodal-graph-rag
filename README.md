@@ -1,4 +1,4 @@
-# Graph-Augmented Retrieval and Edge-Aware Caching for Multimodal AI
+# Engineering Graph-Augmented Retrieval and Edge-Aware Caching for Multimodal AI
 
 This project implements a functional hybrid memory system that enables real-time, context-aware retrieval over a multimodal dataset of infrastructure incidents. The system supports semantic search, graph enrichment, and caching strategies optimized for edge-aware AI workloads.
 
@@ -187,6 +187,9 @@ The system works with a synthetic but realistic dataset of infrastructure incide
 │   ├── logs.jsonl
 │   └── drone-images/     # Drone inspection images
 ├── embeddings/            # Generated embeddings
+├── screenshots/           # UI and system screenshots
+│   ├── streamlitUIscreenshots/ # Streamlit interface screenshots
+│   └── neo4jscreenshots/       # Neo4j graph visualization screenshots
 ├── src/                   # Source code
 │   ├── config.py          # Configuration settings
 │   ├── embedding_pipeline.py  # Embedding generation

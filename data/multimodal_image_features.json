@@ -1,0 +1,908 @@
+{
+  "image_features": [
+    {
+      "image_id": "INC900_tower_forest_inspection.jpeg",
+      "incident_id": "INC900",
+      "asset_type": "Router",
+      "asset_id": "R13",
+      "zone_id": "Zone 14",
+      "primary_feature": "Structural",
+      "all_features": [
+        {
+          "feature": "Vegetation",
+          "confidence": 0.6
+        },
+        {
+          "feature": "Structural",
+          "confidence": 0.7
+        }
+      ],
+      "environment": "forest",
+      "caption": "Drone photo of telecom tower in forest, showing antennas and structural frame.",
+      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC900_tower_forest_inspection.jpeg"
+    },
+    {
+      "image_id": "INC901_bts_environmental_fatigue_desert.jpeg",
+      "incident_id": "INC901",
+      "asset_type": "Router",
+      "asset_id": "R96",
+      "zone_id": "Zone 11",
+      "primary_feature": "Corrosion",
+      "all_features": [
+        {
+          "feature": "Corrosion",
+          "confidence": 0.7
+        },
+        {
+          "feature": "Structural",
+          "confidence": 0.6
+        },
+        {
+          "feature": "Dust",
+          "confidence": 0.6
+        }
+      ],
+      "environment": "desert",
+      "caption": "Desert BTS with visible signs of weathering and fatigue on the frame.",
+      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC901_bts_environmental_fatigue_desert.jpeg"
+    },
+    {
+      "image_id": "INC902_bts_power_unit_failure.jpeg",
+      "incident_id": "INC902",
+      "asset_type": "Router",
+      "asset_id": "R21",
+      "zone_id": "Zone 11",
+      "primary_feature": "Normal",
+      "all_features": [],
+      "environment": "unknown",
+      "caption": "BTS station showing disconnected power unit in remote location.",
+      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC902_bts_power_unit_failure.jpeg"
+    },
+    {
+      "image_id": "INC903_repeater_missing_panel_zone11.jpeg",
+      "incident_id": "INC903",
+      "asset_type": "Tower",
+      "asset_id": "T93",
+      "zone_id": "Zone 11",
+      "primary_feature": "Damage",
+      "all_features": [
+        {
+          "feature": "Damage",
+          "confidence": 0.6
+        },
+        {
+          "feature": "Obstruction",
+          "confidence": 0.6
+        },
+        {
+          "feature": "Vegetation",
+          "confidence": 0.6
+        }
+      ],
+      "environment": "unknown",
+      "caption": "Repeater with missing panel, partially obscured in vegetation of Zone 11.",
+      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC903_repeater_missing_panel_zone11.jpeg"
+    },
+    {
+      "image_id": "INC904_rooftop_5g_node_sunset.jpeg",
+      "incident_id": "INC904",
+      "asset_type": "BTS",
+      "asset_id": "B10",
+      "zone_id": "Zone 14",
+      "primary_feature": "Normal",
+      "all_features": [],
+      "environment": "urban",
+      "caption": "5G rooftop node captured at sunset, urban skyline visible.",
+      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC904_rooftop_5g_node_sunset.jpeg"
+    },
+    {
+      "image_id": "INC905_bts_desert_solar_damage.jpeg",
+      "incident_id": "INC905",
+      "asset_type": "Tower",
+      "asset_id": "T53",
+      "zone_id": "Zone 11",
+      "primary_feature": "Damage",
+      "all_features": [
+        {
+          "feature": "Damage",
+          "confidence": 0.7
+        },
+        {
+          "feature": "Dust",
+          "confidence": 0.6
+        }
+      ],
+      "environment": "desert",
+      "caption": "Solar panels damaged on BTS station in arid desert environment.",
+      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC905_bts_desert_solar_damage.jpeg"
+    },
+    {
+      "image_id": "INC906_bts_standing_water_foundation.jpeg",
+      "incident_id": "INC906",
+      "asset_type": "BTS",
+      "asset_id": "B87",
+      "zone_id": "Zone 12",
+      "primary_feature": "Water",
+      "all_features": [
+        {
+          "feature": "Water",
+          "confidence": 0.7
+        }
+      ],
+      "environment": "unknown",
+      "caption": "Flooded foundation at BTS site, with water pooling around base.",
+      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC906_bts_standing_water_foundation.jpeg"
+    },
+    {
+      "image_id": "INC907_tower_urban_cabling_loose.jpeg",
+      "incident_id": "INC907",
+      "asset_type": "Router",
+      "asset_id": "R58",
+      "zone_id": "Zone 14",
+      "primary_feature": "Damage",
+      "all_features": [
+        {
+          "feature": "Damage",
+          "confidence": 0.6
+        },
+        {
+          "feature": "Structural",
+          "confidence": 0.6
+        },
+        {
+          "feature": "Normal",
+          "confidence": 0.6
+        }
+      ],
+      "environment": "urban",
+      "caption": "Loose cabling observed at urban tower during inspection.",
+      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC907_tower_urban_cabling_loose.jpeg"
+    },
+    {
+      "image_id": "INC908_bts_environmental_fatigue_desert.jpeg",
+      "incident_id": "INC908",
+      "asset_type": "Tower",
+      "asset_id": "T18",
+      "zone_id": "Zone 12",
+      "primary_feature": "Corrosion",
+      "all_features": [
+        {
+          "feature": "Corrosion",
+          "confidence": 0.6
+        },
+        {
+          "feature": "Alignment",
+          "confidence": 0.6
+        },
+        {
+          "feature": "Dust",
+          "confidence": 0.6
+        }
+      ],
+      "environment": "desert",
+      "caption": "Severe weathering on BTS in desert, panels misaligned and faded.",
+      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC908_bts_environmental_fatigue_desert.jpeg"
+    },
+    {
+      "image_id": "INC909_tower_muddy_base_flooded.jpeg",
+      "incident_id": "INC909",
+      "asset_type": "Router",
+      "asset_id": "R58",
+      "zone_id": "Zone 11",
+      "primary_feature": "Water",
+      "all_features": [
+        {
+          "feature": "Water",
+          "confidence": 0.7
+        }
+      ],
+      "environment": "unknown",
+      "caption": "Tower standing on muddy base, signs of flooding and soft ground.",
+      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC909_tower_muddy_base_flooded.jpeg"
+    },
+    {
+      "image_id": "INC910_5g_node_rooftop_rain_rust.jpeg",
+      "incident_id": "INC910",
+      "asset_type": "BTS",
+      "asset_id": "B55",
+      "zone_id": "Zone 11",
+      "primary_feature": "Corrosion",
+      "all_features": [
+        {
+          "feature": "Corrosion",
+          "confidence": 0.6
+        },
+        {
+          "feature": "Water",
+          "confidence": 0.6
+        }
+      ],
+      "environment": "rooftop",
+      "caption": "Rust on rooftop-mounted 5G node, water stains on surrounding surface.",
+      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC910_5g_node_rooftop_rain_rust.jpeg"
+    },
+    {
+      "image_id": "INC911_repeater_dusty_solar_array.jpeg",
+      "incident_id": "INC911",
+      "asset_type": "Router",
+      "asset_id": "R87",
+      "zone_id": "Zone 14",
+      "primary_feature": "Dust",
+      "all_features": [
+        {
+          "feature": "Dust",
+          "confidence": 0.6
+        }
+      ],
+      "environment": "unknown",
+      "caption": "Dust-covered solar array attached to repeater station in remote zone.",
+      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC911_repeater_dusty_solar_array.jpeg"
+    },
+    {
+      "image_id": "INC912_tower_forest_canopy_obstructed.jpeg",
+      "incident_id": "INC912",
+      "asset_type": "Tower",
+      "asset_id": "T69",
+      "zone_id": "Zone 11",
+      "primary_feature": "Vegetation",
+      "all_features": [
+        {
+          "feature": "Vegetation",
+          "confidence": 0.7
+        }
+      ],
+      "environment": "forest",
+      "caption": "Canopy obstructing line of sight for tower antennas in forested zone.",
+      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC912_tower_forest_canopy_obstructed.jpeg"
+    },
+    {
+      "image_id": "INC913_tower_structural_tilt_hilltop.jpeg",
+      "incident_id": "INC913",
+      "asset_type": "Tower",
+      "asset_id": "T97",
+      "zone_id": "Zone 14",
+      "primary_feature": "Structural",
+      "all_features": [
+        {
+          "feature": "Alignment",
+          "confidence": 0.7
+        },
+        {
+          "feature": "Water",
+          "confidence": 0.6
+        },
+        {
+          "feature": "Structural",
+          "confidence": 0.8
+        }
+      ],
+      "environment": "hilltop",
+      "caption": "Structural tilt noted in hilltop tower; mounting brackets strained.",
+      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC913_tower_structural_tilt_hilltop.jpeg"
+    },
+    {
+      "image_id": "INC914_router_loose_cable_urban.jpeg",
+      "incident_id": "INC914",
+      "asset_type": "Repeater",
+      "asset_id": "R44",
+      "zone_id": "Zone 12",
+      "primary_feature": "Damage",
+      "all_features": [
+        {
+          "feature": "Damage",
+          "confidence": 0.6
+        },
+        {
+          "feature": "Structural",
+          "confidence": 0.6
+        }
+      ],
+      "environment": "urban",
+      "caption": "Urban router with visibly loose cabling on rooftop infrastructure.",
+      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC914_router_loose_cable_urban.jpeg"
+    },
+    {
+      "image_id": "INC915_tower_overloaded_mast_city.jpeg",
+      "incident_id": "INC915",
+      "asset_type": "Tower",
+      "asset_id": "T93",
+      "zone_id": "Zone 12",
+      "primary_feature": "Obstruction",
+      "all_features": [
+        {
+          "feature": "Obstruction",
+          "confidence": 0.6
+        }
+      ],
+      "environment": "unknown",
+      "caption": "Overloaded mast in dense city environment with multiple attachments.",
+      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC915_tower_overloaded_mast_city.jpeg"
+    },
+    {
+      "image_id": "INC916_tower_forest_zone12_moisture.jpeg",
+      "incident_id": "INC916",
+      "asset_type": "BTS",
+      "asset_id": "B27",
+      "zone_id": "Zone 11",
+      "primary_feature": "Vegetation",
+      "all_features": [
+        {
+          "feature": "Vegetation",
+          "confidence": 0.7
+        },
+        {
+          "feature": "Water",
+          "confidence": 0.6
+        }
+      ],
+      "environment": "forest",
+      "caption": "Moisture buildup around forest tower, vegetation encroaching base.",
+      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC916_tower_forest_zone12_moisture.jpeg"
+    },
+    {
+      "image_id": "INC917_tower_overgrown_branches_zone14.jpeg",
+      "incident_id": "INC917",
+      "asset_type": "Repeater",
+      "asset_id": "R56",
+      "zone_id": "Zone 12",
+      "primary_feature": "Obstruction",
+      "all_features": [
+        {
+          "feature": "Obstruction",
+          "confidence": 0.6
+        },
+        {
+          "feature": "Vegetation",
+          "confidence": 0.6
+        }
+      ],
+      "environment": "unknown",
+      "caption": "Foliage interfering with tower components in Zone 14.",
+      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC917_tower_overgrown_branches_zone14.jpeg"
+    },
+    {
+      "image_id": "INC918_bts_standing_water_foundation.jpeg",
+      "incident_id": "INC918",
+      "asset_type": "Router",
+      "asset_id": "R24",
+      "zone_id": "Zone 11",
+      "primary_feature": "Water",
+      "all_features": [
+        {
+          "feature": "Water",
+          "confidence": 0.7
+        }
+      ],
+      "environment": "unknown",
+      "caption": "Foundation of BTS surrounded by standing water, risk of short circuit.",
+      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC918_bts_standing_water_foundation.jpeg"
+    },
+    {
+      "image_id": "INC919_tower_alignment_issue_high_winds.jpeg",
+      "incident_id": "INC919",
+      "asset_type": "Router",
+      "asset_id": "R59",
+      "zone_id": "Zone 14",
+      "primary_feature": "Alignment",
+      "all_features": [
+        {
+          "feature": "Alignment",
+          "confidence": 0.7
+        }
+      ],
+      "environment": "unknown",
+      "caption": "Alignment deviation on tower caused by sustained high winds.",
+      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC919_tower_alignment_issue_high_winds.jpeg"
+    }
+  ],
+  "environmental_context": [
+    {
+      "image_id": "INC900_tower_forest_inspection.jpeg",
+      "environment": "forest",
+      "asset_type": "Router",
+      "zone_id": "Zone 14"
+    },
+    {
+      "image_id": "INC901_bts_environmental_fatigue_desert.jpeg",
+      "environment": "desert",
+      "asset_type": "Router",
+      "zone_id": "Zone 11"
+    },
+    {
+      "image_id": "INC902_bts_power_unit_failure.jpeg",
+      "environment": "unknown",
+      "asset_type": "Router",
+      "zone_id": "Zone 11"
+    },
+    {
+      "image_id": "INC903_repeater_missing_panel_zone11.jpeg",
+      "environment": "unknown",
+      "asset_type": "Tower",
+      "zone_id": "Zone 11"
+    },
+    {
+      "image_id": "INC904_rooftop_5g_node_sunset.jpeg",
+      "environment": "urban",
+      "asset_type": "BTS",
+      "zone_id": "Zone 14"
+    },
+    {
+      "image_id": "INC905_bts_desert_solar_damage.jpeg",
+      "environment": "desert",
+      "asset_type": "Tower",
+      "zone_id": "Zone 11"
+    },
+    {
+      "image_id": "INC906_bts_standing_water_foundation.jpeg",
+      "environment": "unknown",
+      "asset_type": "BTS",
+      "zone_id": "Zone 12"
+    },
+    {
+      "image_id": "INC907_tower_urban_cabling_loose.jpeg",
+      "environment": "urban",
+      "asset_type": "Router",
+      "zone_id": "Zone 14"
+    },
+    {
+      "image_id": "INC908_bts_environmental_fatigue_desert.jpeg",
+      "environment": "desert",
+      "asset_type": "Tower",
+      "zone_id": "Zone 12"
+    },
+    {
+      "image_id": "INC909_tower_muddy_base_flooded.jpeg",
+      "environment": "unknown",
+      "asset_type": "Router",
+      "zone_id": "Zone 11"
+    },
+    {
+      "image_id": "INC910_5g_node_rooftop_rain_rust.jpeg",
+      "environment": "rooftop",
+      "asset_type": "BTS",
+      "zone_id": "Zone 11"
+    },
+    {
+      "image_id": "INC911_repeater_dusty_solar_array.jpeg",
+      "environment": "unknown",
+      "asset_type": "Router",
+      "zone_id": "Zone 14"
+    },
+    {
+      "image_id": "INC912_tower_forest_canopy_obstructed.jpeg",
+      "environment": "forest",
+      "asset_type": "Tower",
+      "zone_id": "Zone 11"
+    },
+    {
+      "image_id": "INC913_tower_structural_tilt_hilltop.jpeg",
+      "environment": "hilltop",
+      "asset_type": "Tower",
+      "zone_id": "Zone 14"
+    },
+    {
+      "image_id": "INC914_router_loose_cable_urban.jpeg",
+      "environment": "urban",
+      "asset_type": "Repeater",
+      "zone_id": "Zone 12"
+    },
+    {
+      "image_id": "INC915_tower_overloaded_mast_city.jpeg",
+      "environment": "unknown",
+      "asset_type": "Tower",
+      "zone_id": "Zone 12"
+    },
+    {
+      "image_id": "INC916_tower_forest_zone12_moisture.jpeg",
+      "environment": "forest",
+      "asset_type": "BTS",
+      "zone_id": "Zone 11"
+    },
+    {
+      "image_id": "INC917_tower_overgrown_branches_zone14.jpeg",
+      "environment": "unknown",
+      "asset_type": "Repeater",
+      "zone_id": "Zone 12"
+    },
+    {
+      "image_id": "INC918_bts_standing_water_foundation.jpeg",
+      "environment": "unknown",
+      "asset_type": "Router",
+      "zone_id": "Zone 11"
+    },
+    {
+      "image_id": "INC919_tower_alignment_issue_high_winds.jpeg",
+      "environment": "unknown",
+      "asset_type": "Router",
+      "zone_id": "Zone 14"
+    }
+  ],
+  "asset_feature_correlations": [
+    {
+      "asset_type": "Router",
+      "feature": "Structural",
+      "count": 1,
+      "images": [
+        "INC900_tower_forest_inspection.jpeg"
+      ]
+    },
+    {
+      "asset_type": "Router",
+      "feature": "Corrosion",
+      "count": 1,
+      "images": [
+        "INC901_bts_environmental_fatigue_desert.jpeg"
+      ]
+    },
+    {
+      "asset_type": "Router",
+      "feature": "Normal",
+      "count": 1,
+      "images": [
+        "INC902_bts_power_unit_failure.jpeg"
+      ]
+    },
+    {
+      "asset_type": "Tower",
+      "feature": "Damage",
+      "count": 2,
+      "images": [
+        "INC903_repeater_missing_panel_zone11.jpeg",
+        "INC905_bts_desert_solar_damage.jpeg"
+      ]
+    },
+    {
+      "asset_type": "BTS",
+      "feature": "Normal",
+      "count": 1,
+      "images": [
+        "INC904_rooftop_5g_node_sunset.jpeg"
+      ]
+    },
+    {
+      "asset_type": "BTS",
+      "feature": "Water",
+      "count": 1,
+      "images": [
+        "INC906_bts_standing_water_foundation.jpeg"
+      ]
+    },
+    {
+      "asset_type": "Router",
+      "feature": "Damage",
+      "count": 1,
+      "images": [
+        "INC907_tower_urban_cabling_loose.jpeg"
+      ]
+    },
+    {
+      "asset_type": "Tower",
+      "feature": "Corrosion",
+      "count": 1,
+      "images": [
+        "INC908_bts_environmental_fatigue_desert.jpeg"
+      ]
+    },
+    {
+      "asset_type": "Router",
+      "feature": "Water",
+      "count": 2,
+      "images": [
+        "INC909_tower_muddy_base_flooded.jpeg",
+        "INC918_bts_standing_water_foundation.jpeg"
+      ]
+    },
+    {
+      "asset_type": "BTS",
+      "feature": "Corrosion",
+      "count": 1,
+      "images": [
+        "INC910_5g_node_rooftop_rain_rust.jpeg"
+      ]
+    },
+    {
+      "asset_type": "Router",
+      "feature": "Dust",
+      "count": 1,
+      "images": [
+        "INC911_repeater_dusty_solar_array.jpeg"
+      ]
+    },
+    {
+      "asset_type": "Tower",
+      "feature": "Vegetation",
+      "count": 1,
+      "images": [
+        "INC912_tower_forest_canopy_obstructed.jpeg"
+      ]
+    },
+    {
+      "asset_type": "Tower",
+      "feature": "Structural",
+      "count": 1,
+      "images": [
+        "INC913_tower_structural_tilt_hilltop.jpeg"
+      ]
+    },
+    {
+      "asset_type": "Repeater",
+      "feature": "Damage",
+      "count": 1,
+      "images": [
+        "INC914_router_loose_cable_urban.jpeg"
+      ]
+    },
+    {
+      "asset_type": "Tower",
+      "feature": "Obstruction",
+      "count": 1,
+      "images": [
+        "INC915_tower_overloaded_mast_city.jpeg"
+      ]
+    },
+    {
+      "asset_type": "BTS",
+      "feature": "Vegetation",
+      "count": 1,
+      "images": [
+        "INC916_tower_forest_zone12_moisture.jpeg"
+      ]
+    },
+    {
+      "asset_type": "Repeater",
+      "feature": "Obstruction",
+      "count": 1,
+      "images": [
+        "INC917_tower_overgrown_branches_zone14.jpeg"
+      ]
+    },
+    {
+      "asset_type": "Router",
+      "feature": "Alignment",
+      "count": 1,
+      "images": [
+        "INC919_tower_alignment_issue_high_winds.jpeg"
+      ]
+    }
+  ],
+  "environment_correlations": [
+    {
+      "environment": "forest",
+      "feature": "Structural",
+      "count": 1,
+      "images": [
+        "INC900_tower_forest_inspection.jpeg"
+      ]
+    },
+    {
+      "environment": "desert",
+      "feature": "Corrosion",
+      "count": 2,
+      "images": [
+        "INC901_bts_environmental_fatigue_desert.jpeg",
+        "INC908_bts_environmental_fatigue_desert.jpeg"
+      ]
+    },
+    {
+      "environment": "unknown",
+      "feature": "Normal",
+      "count": 1,
+      "images": [
+        "INC902_bts_power_unit_failure.jpeg"
+      ]
+    },
+    {
+      "environment": "unknown",
+      "feature": "Damage",
+      "count": 1,
+      "images": [
+        "INC903_repeater_missing_panel_zone11.jpeg"
+      ]
+    },
+    {
+      "environment": "urban",
+      "feature": "Normal",
+      "count": 1,
+      "images": [
+        "INC904_rooftop_5g_node_sunset.jpeg"
+      ]
+    },
+    {
+      "environment": "desert",
+      "feature": "Damage",
+      "count": 1,
+      "images": [
+        "INC905_bts_desert_solar_damage.jpeg"
+      ]
+    },
+    {
+      "environment": "unknown",
+      "feature": "Water",
+      "count": 3,
+      "images": [
+        "INC906_bts_standing_water_foundation.jpeg",
+        "INC909_tower_muddy_base_flooded.jpeg",
+        "INC918_bts_standing_water_foundation.jpeg"
+      ]
+    },
+    {
+      "environment": "urban",
+      "feature": "Damage",
+      "count": 2,
+      "images": [
+        "INC907_tower_urban_cabling_loose.jpeg",
+        "INC914_router_loose_cable_urban.jpeg"
+      ]
+    },
+    {
+      "environment": "rooftop",
+      "feature": "Corrosion",
+      "count": 1,
+      "images": [
+        "INC910_5g_node_rooftop_rain_rust.jpeg"
+      ]
+    },
+    {
+      "environment": "unknown",
+      "feature": "Dust",
+      "count": 1,
+      "images": [
+        "INC911_repeater_dusty_solar_array.jpeg"
+      ]
+    },
+    {
+      "environment": "forest",
+      "feature": "Vegetation",
+      "count": 2,
+      "images": [
+        "INC912_tower_forest_canopy_obstructed.jpeg",
+        "INC916_tower_forest_zone12_moisture.jpeg"
+      ]
+    },
+    {
+      "environment": "hilltop",
+      "feature": "Structural",
+      "count": 1,
+      "images": [
+        "INC913_tower_structural_tilt_hilltop.jpeg"
+      ]
+    },
+    {
+      "environment": "unknown",
+      "feature": "Obstruction",
+      "count": 2,
+      "images": [
+        "INC915_tower_overloaded_mast_city.jpeg",
+        "INC917_tower_overgrown_branches_zone14.jpeg"
+      ]
+    },
+    {
+      "environment": "unknown",
+      "feature": "Alignment",
+      "count": 1,
+      "images": [
+        "INC919_tower_alignment_issue_high_winds.jpeg"
+      ]
+    }
+  ],
+  "zone_feature_patterns": [
+    {
+      "zone_id": "Zone 14",
+      "feature": "Structural",
+      "count": 2,
+      "images": [
+        "INC900_tower_forest_inspection.jpeg",
+        "INC913_tower_structural_tilt_hilltop.jpeg"
+      ]
+    },
+    {
+      "zone_id": "Zone 11",
+      "feature": "Corrosion",
+      "count": 2,
+      "images": [
+        "INC901_bts_environmental_fatigue_desert.jpeg",
+        "INC910_5g_node_rooftop_rain_rust.jpeg"
+      ]
+    },
+    {
+      "zone_id": "Zone 11",
+      "feature": "Normal",
+      "count": 1,
+      "images": [
+        "INC902_bts_power_unit_failure.jpeg"
+      ]
+    },
+    {
+      "zone_id": "Zone 11",
+      "feature": "Damage",
+      "count": 2,
+      "images": [
+        "INC903_repeater_missing_panel_zone11.jpeg",
+        "INC905_bts_desert_solar_damage.jpeg"
+      ]
+    },
+    {
+      "zone_id": "Zone 14",
+      "feature": "Normal",
+      "count": 1,
+      "images": [
+        "INC904_rooftop_5g_node_sunset.jpeg"
+      ]
+    },
+    {
+      "zone_id": "Zone 12",
+      "feature": "Water",
+      "count": 1,
+      "images": [
+        "INC906_bts_standing_water_foundation.jpeg"
+      ]
+    },
+    {
+      "zone_id": "Zone 14",
+      "feature": "Damage",
+      "count": 1,
+      "images": [
+        "INC907_tower_urban_cabling_loose.jpeg"
+      ]
+    },
+    {
+      "zone_id": "Zone 12",
+      "feature": "Corrosion",
+      "count": 1,
+      "images": [
+        "INC908_bts_environmental_fatigue_desert.jpeg"
+      ]
+    },
+    {
+      "zone_id": "Zone 11",
+      "feature": "Water",
+      "count": 2,
+      "images": [
+        "INC909_tower_muddy_base_flooded.jpeg",
+        "INC918_bts_standing_water_foundation.jpeg"
+      ]
+    },
+    {
+      "zone_id": "Zone 14",
+      "feature": "Dust",
+      "count": 1,
+      "images": [
+        "INC911_repeater_dusty_solar_array.jpeg"
+      ]
+    },
+    {
+      "zone_id": "Zone 11",
+      "feature": "Vegetation",
+      "count": 2,
+      "images": [
+        "INC912_tower_forest_canopy_obstructed.jpeg",
+        "INC916_tower_forest_zone12_moisture.jpeg"
+      ]
+    },
+    {
+      "zone_id": "Zone 12",
+      "feature": "Damage",
+      "count": 1,
+      "images": [
+        "INC914_router_loose_cable_urban.jpeg"
+      ]
+    },
+    {
+      "zone_id": "Zone 12",
+      "feature": "Obstruction",
+      "count": 2,
+      "images": [
+        "INC915_tower_overloaded_mast_city.jpeg",
+        "INC917_tower_overgrown_branches_zone14.jpeg"
+      ]
+    },
+    {
+      "zone_id": "Zone 14",
+      "feature": "Alignment",
+      "count": 1,
+      "images": [
+        "INC919_tower_alignment_issue_high_winds.jpeg"
+      ]
+    }
+  ]
+}

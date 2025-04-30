@@ -1,0 +1,21 @@
+incident_id,image_filename,caption
+INC900,INC900_tower_forest_inspection.jpeg,"Drone photo of telecom tower in forest, showing antennas and structural frame."
+INC901,INC901_bts_environmental_fatigue_desert.jpeg,Desert BTS with visible signs of weathering and fatigue on the frame.
+INC902,INC902_bts_power_unit_failure.jpeg,BTS station showing disconnected power unit in remote location.
+INC903,INC903_repeater_missing_panel_zone11.jpeg,"Repeater with missing panel, partially obscured in vegetation of Zone 11."
+INC904,INC904_rooftop_5g_node_sunset.jpeg,"5G rooftop node captured at sunset, urban skyline visible."
+INC905,INC905_bts_desert_solar_damage.jpeg,Solar panels damaged on BTS station in arid desert environment.
+INC906,INC906_bts_standing_water_foundation.jpeg,"Flooded foundation at BTS site, with water pooling around base."
+INC907,INC907_tower_urban_cabling_loose.jpeg,Loose cabling observed at urban tower during inspection.
+INC908,INC908_bts_environmental_fatigue_desert.jpeg,"Severe weathering on BTS in desert, panels misaligned and faded."
+INC909,INC909_tower_muddy_base_flooded.jpeg,"Tower standing on muddy base, signs of flooding and soft ground."
+INC910,INC910_5g_node_rooftop_rain_rust.jpeg,"Rust on rooftop-mounted 5G node, water stains on surrounding surface."
+INC911,INC911_repeater_dusty_solar_array.jpeg,Dust-covered solar array attached to repeater station in remote zone.
+INC912,INC912_tower_forest_canopy_obstructed.jpeg,Canopy obstructing line of sight for tower antennas in forested zone.
+INC913,INC913_tower_structural_tilt_hilltop.jpeg,Structural tilt noted in hilltop tower; mounting brackets strained.
+INC914,INC914_router_loose_cable_urban.jpeg,Urban router with visibly loose cabling on rooftop infrastructure.
+INC915,INC915_tower_overloaded_mast_city.jpeg,Overloaded mast in dense city environment with multiple attachments.
+INC916,INC916_tower_forest_zone12_moisture.jpeg,"Moisture buildup around forest tower, vegetation encroaching base."
+INC917,INC917_tower_overgrown_branches_zone14.jpeg,Foliage interfering with tower components in Zone 14.
+INC918,INC918_bts_standing_water_foundation.jpeg,"Foundation of BTS surrounded by standing water, risk of short circuit."
+INC919,INC919_tower_alignment_issue_high_winds.jpeg,Alignment deviation on tower caused by sustained high winds.

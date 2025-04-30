@@ -1,0 +1,101 @@
+incident_id,description,zone,asset_type,asset_id,timestamp,priority,status,resolution_summary
+INC900,Packet loss observed on Router R13. Issue reported by monitoring system.,Zone 14,Router,R13,2025-02-02T08:08:13,High,Resolved,Rolled back firmware and restored functionality.
+INC901,Signal degradation observed on Router R96. Issue reported by monitoring system.,Zone 11,Router,R96,2025-04-08T09:24:44,High,Open,
+INC902,Signal degradation observed on Router R21. Issue reported by monitoring system.,Zone 11,Router,R21,2025-02-15T08:51:36,Low,Open,
+INC903,Packet loss observed on Tower T93. Issue reported by monitoring system.,Zone 11,Tower,T93,2025-04-12T02:01:12,High,Resolved,Updated routing table and restored functionality.
+INC904,Latency spikes observed on BTS B10. Issue reported by monitoring system.,Zone 14,BTS,B10,2025-02-27T07:14:46,Low,Resolved,Replaced faulty module and restored functionality.
+INC905,Firmware update failure observed on Tower T53. Issue reported by monitoring system.,Zone 11,Tower,T53,2025-03-25T10:44:01,Low,Open,
+INC906,Port flapping observed on BTS B87. Issue reported by monitoring system.,Zone 12,BTS,B87,2025-02-24T15:35:04,Medium,Open,
+INC907,Port flapping observed on Router R58. Issue reported by monitoring system.,Zone 14,Router,R58,2025-02-27T09:06:03,Low,Resolved,Cleared the error logs and restored functionality.
+INC908,Latency spikes observed on Tower T18. Issue reported by monitoring system.,Zone 12,Tower,T18,2025-01-30T23:40:42,Low,Open,
+INC909,Port flapping observed on Router R58. Issue reported by monitoring system.,Zone 11,Router,R58,2025-03-16T22:34:24,Medium,Resolved,Replaced faulty module and restored functionality.
+INC910,Port flapping observed on BTS B55. Issue reported by monitoring system.,Zone 11,BTS,B55,2025-04-17T00:00:29,Low,Resolved,Realigned antenna and restored functionality.
+INC911,Signal degradation observed on Router R87. Issue reported by monitoring system.,Zone 14,Router,R87,2025-03-24T13:53:28,High,Open,
+INC912,Port flapping observed on Tower T69. Issue reported by monitoring system.,Zone 11,Tower,T69,2025-03-22T12:32:30,Medium,Resolved,Realigned antenna and restored functionality.
+INC913,Packet loss observed on Tower T97. Issue reported by monitoring system.,Zone 14,Tower,T97,2025-03-26T18:56:17,Medium,Open,
+INC914,Signal degradation observed on Repeater R44. Issue reported by monitoring system.,Zone 12,Repeater,R44,2025-03-24T19:37:14,Low,Open,
+INC915,Port flapping observed on Tower T93. Issue reported by monitoring system.,Zone 12,Tower,T93,2025-04-20T02:40:43,Medium,Resolved,Updated routing table and restored functionality.
+INC916,Port flapping observed on BTS B27. Issue reported by monitoring system.,Zone 11,BTS,B27,2025-04-09T00:53:04,Low,Resolved,Cleared the error logs and restored functionality.
+INC917,Signal degradation observed on Repeater R56. Issue reported by monitoring system.,Zone 12,Repeater,R56,2025-03-26T15:07:26,Low,Open,
+INC918,Port flapping observed on Router R24. Issue reported by monitoring system.,Zone 11,Router,R24,2025-04-23T17:49:17,Low,Open,
+INC919,Signal degradation observed on Router R59. Issue reported by monitoring system.,Zone 14,Router,R59,2025-03-23T19:23:39,Medium,Resolved,Replaced faulty module and restored functionality.
+INC920,Port flapping observed on Router R97. Issue reported by monitoring system.,Zone 14,Router,R97,2025-02-10T05:58:11,High,Open,
+INC921,Packet loss observed on BTS B24. Issue reported by monitoring system.,Zone 12,BTS,B24,2025-03-11T18:48:17,Medium,Resolved,Updated routing table and restored functionality.
+INC922,Port flapping observed on BTS B74. Issue reported by monitoring system.,Zone 11,BTS,B74,2025-03-06T17:23:12,Low,Open,
+INC923,Signal degradation observed on Tower T29. Issue reported by monitoring system.,Zone 14,Tower,T29,2025-03-04T06:01:36,Medium,Open,
+INC924,Latency spikes observed on BTS B72. Issue reported by monitoring system.,Zone 11,BTS,B72,2025-02-21T08:24:22,Low,Open,
+INC925,Frequent disconnections observed on Router R40. Issue reported by monitoring system.,Zone 11,Router,R40,2025-03-13T15:59:02,High,Open,
+INC926,Port flapping observed on Router R78. Issue reported by monitoring system.,Zone 12,Router,R78,2025-02-18T12:56:47,Low,Open,
+INC927,Packet loss observed on Tower T43. Issue reported by monitoring system.,Zone 14,Tower,T43,2025-04-09T18:14:04,High,Resolved,Cleared the error logs and restored functionality.
+INC928,Firmware update failure observed on Tower T49. Issue reported by monitoring system.,Zone 14,Tower,T49,2025-04-09T22:13:53,Medium,Resolved,Cleared the error logs and restored functionality.
+INC929,Latency spikes observed on Router R41. Issue reported by monitoring system.,Zone 12,Router,R41,2025-02-04T07:16:33,Low,Open,
+INC930,Frequent disconnections observed on Tower T85. Issue reported by monitoring system.,Zone 14,Tower,T85,2025-02-22T17:21:12,Low,Open,
+INC931,Latency spikes observed on Router R39. Issue reported by monitoring system.,Zone 14,Router,R39,2025-04-06T00:23:02,Low,Open,
+INC932,Packet loss observed on Tower T45. Issue reported by monitoring system.,Zone 14,Tower,T45,2025-02-06T15:09:05,High,Resolved,Cleared the error logs and restored functionality.
+INC933,Packet loss observed on Repeater R41. Issue reported by monitoring system.,Zone 11,Repeater,R41,2025-03-03T03:08:21,Medium,Resolved,Restarted the device and restored functionality.
+INC934,Firmware update failure observed on Repeater R55. Issue reported by monitoring system.,Zone 11,Repeater,R55,2025-02-22T11:28:35,Medium,Resolved,Realigned antenna and restored functionality.
+INC935,Frequent disconnections observed on Router R17. Issue reported by monitoring system.,Zone 11,Router,R17,2025-02-14T21:52:04,Medium,Resolved,Rolled back firmware and restored functionality.
+INC936,Firmware update failure observed on Tower T78. Issue reported by monitoring system.,Zone 11,Tower,T78,2025-04-03T14:39:16,Medium,Open,
+INC937,Signal degradation observed on Repeater R41. Issue reported by monitoring system.,Zone 12,Repeater,R41,2025-02-14T01:41:28,Low,Resolved,Restarted the device and restored functionality.
+INC938,Firmware update failure observed on Router R21. Issue reported by monitoring system.,Zone 11,Router,R21,2025-04-12T14:04:15,Low,Open,
+INC939,Firmware update failure observed on Tower T61. Issue reported by monitoring system.,Zone 12,Tower,T61,2025-04-18T14:22:49,Low,Open,
+INC940,Port flapping observed on BTS B68. Issue reported by monitoring system.,Zone 12,BTS,B68,2025-04-23T07:29:50,Medium,Resolved,Realigned antenna and restored functionality.
+INC941,Packet loss observed on Repeater R29. Issue reported by monitoring system.,Zone 14,Repeater,R29,2025-03-19T08:26:45,Low,Resolved,Restarted the device and restored functionality.
+INC942,Signal degradation observed on Router R50. Issue reported by monitoring system.,Zone 14,Router,R50,2025-04-11T19:40:18,Low,Open,
+INC943,Packet loss observed on Tower T17. Issue reported by monitoring system.,Zone 14,Tower,T17,2025-02-16T07:48:41,High,Open,
+INC944,Frequent disconnections observed on Router R96. Issue reported by monitoring system.,Zone 14,Router,R96,2025-03-22T13:42:28,Low,Resolved,Cleared the error logs and restored functionality.
+INC945,Port flapping observed on Router R89. Issue reported by monitoring system.,Zone 11,Router,R89,2025-02-10T06:04:17,Low,Resolved,Cleared the error logs and restored functionality.
+INC946,Packet loss observed on BTS B43. Issue reported by monitoring system.,Zone 14,BTS,B43,2025-04-04T03:32:15,Low,Resolved,Replaced faulty module and restored functionality.
+INC947,Firmware update failure observed on Tower T95. Issue reported by monitoring system.,Zone 12,Tower,T95,2025-03-31T07:31:07,High,Resolved,Replaced faulty module and restored functionality.
+INC948,Frequent disconnections observed on Router R68. Issue reported by monitoring system.,Zone 11,Router,R68,2025-02-28T22:28:27,High,Open,
+INC949,Packet loss observed on BTS B26. Issue reported by monitoring system.,Zone 11,BTS,B26,2025-04-28T04:41:29,Medium,Open,
+INC950,Signal degradation observed on Tower T66. Issue reported by monitoring system.,Zone 12,Tower,T66,2025-02-07T01:43:30,High,Resolved,Realigned antenna and restored functionality.
+INC951,Port flapping observed on Router R95. Issue reported by monitoring system.,Zone 14,Router,R95,2025-03-05T04:26:46,High,Resolved,Restarted the device and restored functionality.
+INC952,Latency spikes observed on BTS B24. Issue reported by monitoring system.,Zone 11,BTS,B24,2025-02-10T05:32:43,Low,Open,
+INC953,Signal degradation observed on Tower T53. Issue reported by monitoring system.,Zone 14,Tower,T53,2025-03-02T04:13:53,Low,Resolved,Updated routing table and restored functionality.
+INC954,Latency spikes observed on Router R21. Issue reported by monitoring system.,Zone 12,Router,R21,2025-03-05T04:59:00,High,Resolved,Restarted the device and restored functionality.
+INC955,Packet loss observed on BTS B26. Issue reported by monitoring system.,Zone 11,BTS,B26,2025-03-14T19:06:01,High,Resolved,Realigned antenna and restored functionality.
+INC956,Frequent disconnections observed on Repeater R81. Issue reported by monitoring system.,Zone 12,Repeater,R81,2025-02-10T18:55:35,Low,Open,
+INC957,Firmware update failure observed on Router R57. Issue reported by monitoring system.,Zone 11,Router,R57,2025-04-03T06:29:14,High,Open,
+INC958,Packet loss observed on BTS B56. Issue reported by monitoring system.,Zone 11,BTS,B56,2025-04-16T11:31:42,Low,Resolved,Realigned antenna and restored functionality.
+INC959,Signal degradation observed on Router R55. Issue reported by monitoring system.,Zone 11,Router,R55,2025-02-12T20:17:53,High,Resolved,Realigned antenna and restored functionality.
+INC960,Frequent disconnections observed on Tower T30. Issue reported by monitoring system.,Zone 11,Tower,T30,2025-03-28T00:17:15,Low,Resolved,Rolled back firmware and restored functionality.
+INC961,Latency spikes observed on BTS B62. Issue reported by monitoring system.,Zone 14,BTS,B62,2025-03-14T03:48:37,High,Open,
+INC962,Packet loss observed on Router R58. Issue reported by monitoring system.,Zone 14,Router,R58,2025-02-03T09:37:18,Low,Resolved,Rolled back firmware and restored functionality.
+INC963,Frequent disconnections observed on BTS B49. Issue reported by monitoring system.,Zone 12,BTS,B49,2025-04-15T22:51:45,Low,Open,
+INC964,Latency spikes observed on Repeater R52. Issue reported by monitoring system.,Zone 11,Repeater,R52,2025-03-10T00:03:23,Medium,Open,
+INC965,Frequent disconnections observed on Repeater R96. Issue reported by monitoring system.,Zone 14,Repeater,R96,2025-04-18T04:45:37,High,Resolved,Restarted the device and restored functionality.
+INC966,Frequent disconnections observed on Tower T84. Issue reported by monitoring system.,Zone 12,Tower,T84,2025-03-17T01:01:37,Medium,Open,
+INC967,Firmware update failure observed on BTS B50. Issue reported by monitoring system.,Zone 12,BTS,B50,2025-02-26T16:38:06,Medium,Open,
+INC968,Frequent disconnections observed on BTS B15. Issue reported by monitoring system.,Zone 11,BTS,B15,2025-01-30T21:16:07,High,Resolved,Cleared the error logs and restored functionality.
+INC969,Port flapping observed on Tower T56. Issue reported by monitoring system.,Zone 14,Tower,T56,2025-01-30T20:21:31,Medium,Open,
+INC970,Signal degradation observed on BTS B94. Issue reported by monitoring system.,Zone 14,BTS,B94,2025-02-08T03:15:24,Low,Resolved,Replaced faulty module and restored functionality.
+INC971,Signal degradation observed on Repeater R51. Issue reported by monitoring system.,Zone 14,Repeater,R51,2025-03-05T16:55:08,Medium,Resolved,Rolled back firmware and restored functionality.
+INC972,Signal degradation observed on Repeater R95. Issue reported by monitoring system.,Zone 11,Repeater,R95,2025-02-17T23:38:17,Medium,Open,
+INC973,Latency spikes observed on Repeater R80. Issue reported by monitoring system.,Zone 12,Repeater,R80,2025-03-09T12:06:48,Low,Resolved,Rolled back firmware and restored functionality.
+INC974,Port flapping observed on BTS B69. Issue reported by monitoring system.,Zone 12,BTS,B69,2025-03-18T10:00:25,Medium,Resolved,Rolled back firmware and restored functionality.
+INC975,Latency spikes observed on Repeater R31. Issue reported by monitoring system.,Zone 14,Repeater,R31,2025-03-25T14:33:09,High,Open,
+INC976,Packet loss observed on BTS B21. Issue reported by monitoring system.,Zone 14,BTS,B21,2025-03-13T23:57:43,Low,Resolved,Rolled back firmware and restored functionality.
+INC977,Signal degradation observed on Router R15. Issue reported by monitoring system.,Zone 11,Router,R15,2025-02-18T01:18:38,Low,Resolved,Restarted the device and restored functionality.
+INC978,Port flapping observed on Repeater R90. Issue reported by monitoring system.,Zone 12,Repeater,R90,2025-02-19T01:01:05,High,Open,
+INC979,Port flapping observed on Repeater R61. Issue reported by monitoring system.,Zone 12,Repeater,R61,2025-04-28T11:58:05,Low,Open,
+INC980,Port flapping observed on Router R64. Issue reported by monitoring system.,Zone 11,Router,R64,2025-03-15T22:19:26,Low,Open,
+INC981,Firmware update failure observed on Router R81. Issue reported by monitoring system.,Zone 12,Router,R81,2025-02-05T04:17:20,Low,Open,
+INC982,Signal degradation observed on BTS B66. Issue reported by monitoring system.,Zone 12,BTS,B66,2025-03-25T17:55:01,High,Resolved,Updated routing table and restored functionality.
+INC983,Port flapping observed on Repeater R67. Issue reported by monitoring system.,Zone 11,Repeater,R67,2025-03-09T02:50:07,Medium,Open,
+INC984,Firmware update failure observed on Repeater R90. Issue reported by monitoring system.,Zone 14,Repeater,R90,2025-03-26T23:42:30,Low,Resolved,Restarted the device and restored functionality.
+INC985,Latency spikes observed on BTS B40. Issue reported by monitoring system.,Zone 14,BTS,B40,2025-03-13T21:48:04,Medium,Resolved,Cleared the error logs and restored functionality.
+INC986,Port flapping observed on Tower T29. Issue reported by monitoring system.,Zone 11,Tower,T29,2025-02-07T17:19:25,Low,Resolved,Rolled back firmware and restored functionality.
+INC987,Latency spikes observed on Tower T18. Issue reported by monitoring system.,Zone 14,Tower,T18,2025-04-02T12:26:27,Medium,Resolved,Cleared the error logs and restored functionality.
+INC988,Firmware update failure observed on Repeater R17. Issue reported by monitoring system.,Zone 12,Repeater,R17,2025-02-14T11:49:38,Low,Resolved,Cleared the error logs and restored functionality.
+INC989,Frequent disconnections observed on Router R83. Issue reported by monitoring system.,Zone 14,Router,R83,2025-01-31T18:03:00,Medium,Resolved,Replaced faulty module and restored functionality.
+INC990,Firmware update failure observed on Repeater R63. Issue reported by monitoring system.,Zone 12,Repeater,R63,2025-03-25T03:07:55,High,Open,
+INC991,Latency spikes observed on Repeater R72. Issue reported by monitoring system.,Zone 12,Repeater,R72,2025-02-03T04:21:29,Low,Resolved,Realigned antenna and restored functionality.
+INC992,Signal degradation observed on Repeater R31. Issue reported by monitoring system.,Zone 14,Repeater,R31,2025-03-11T13:25:15,Medium,Open,
+INC993,Frequent disconnections observed on Repeater R85. Issue reported by monitoring system.,Zone 11,Repeater,R85,2025-04-26T16:11:38,High,Open,
+INC994,Latency spikes observed on Tower T69. Issue reported by monitoring system.,Zone 12,Tower,T69,2025-04-27T16:21:02,Low,Open,
+INC995,Firmware update failure observed on Tower T68. Issue reported by monitoring system.,Zone 12,Tower,T68,2025-02-09T18:16:04,Medium,Resolved,Replaced faulty module and restored functionality.
+INC996,Port flapping observed on BTS B20. Issue reported by monitoring system.,Zone 12,BTS,B20,2025-04-12T22:47:18,Medium,Open,
+INC997,Port flapping observed on BTS B38. Issue reported by monitoring system.,Zone 11,BTS,B38,2025-03-23T21:24:19,High,Open,
+INC998,Packet loss observed on Tower T35. Issue reported by monitoring system.,Zone 11,Tower,T35,2025-04-15T04:20:56,Low,Open,
+INC999,Port flapping observed on Router R82. Issue reported by monitoring system.,Zone 12,Router,R82,2025-02-05T16:05:49,Low,Resolved,Replaced faulty module and restored functionality.

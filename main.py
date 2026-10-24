@@ -72,7 +72,9 @@ def run_streamlit_app():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     env = os.environ.copy()
     env["PYTHONPATH"] = current_dir
-    subprocess.run([sys.executable, "-m", "streamlit", "run", os.path.join(current_dir, "src", "streamlit_app.py")], env=env)
+    # Listen on this machine only unless HOST says otherwise (for example HOST=0.0.0.0)
+    subprocess.run([sys.executable, "-m", "streamlit", "run", os.path.join(current_dir, "src", "streamlit_app.py"),
+                    "--server.address", os.environ.get("HOST", "127.0.0.1")], env=env)
 
 def main():
     """Main entry point for the application"""

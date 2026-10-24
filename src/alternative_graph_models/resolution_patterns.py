@@ -7,7 +7,7 @@ enabling the system to recommend proven fix approaches for similar incidents.
 
 import pandas as pd
 import logging
-from py2neo import Graph, Node, Relationship
+from src.graph_db import Graph, Node
 from collections import Counter
 import re
 
@@ -54,19 +54,19 @@ class ResolutionPatternsGraphConstructor:
         # Extract resolution information from the graph
         result = self.graph.run("""
         MATCH (i:Incident)-[:RESOLVED_BY]->(t:Technician)
-        RETURN i.incident_id, i.description, i.resolution, t.technician_id, i.asset_type
+        RETURN i.incident_id, i.description, i.resolution_summary, t.technician_id, i.asset_type
         """).data()
         
         # Process each incident
         step_count = 0
         for record in result:
             # Skip if no resolution text
-            if not record.get('i.resolution'):
+            if not record.get('i.resolution_summary'):
                 continue
             
             # Extract steps using simple heuristics (in a real system, this would use NLP)
             # Here we're naively splitting by periods and numbering
-            resolution_text = record['i.resolution']
+            resolution_text = record['i.resolution_summary']
             
             # Different ways steps might be separated in text
             steps = []

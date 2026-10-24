@@ -8,7 +8,7 @@ keeps the three calls the code relies on (`graph.run(query, **params).data()`,
 import datetime
 
 import numpy as np
-from neo4j import GraphDatabase
+from neo4j import GraphDatabase, NotificationMinimumSeverity
 
 
 def _plain(value):
@@ -45,7 +45,7 @@ class Graph:
     def __init__(self, uri, auth, database=None):
         # Server notifications at WARNING and above (deprecations, for example); the INFO ones are
         # query-planning hints that would print a line for each node the graph step creates
-        self.driver = GraphDatabase.driver(uri, auth=auth, notifications_min_severity="WARNING")
+        self.driver = GraphDatabase.driver(uri, auth=auth, notifications_min_severity=NotificationMinimumSeverity.WARNING)
         self.driver.verify_connectivity()
         self.database = database
 

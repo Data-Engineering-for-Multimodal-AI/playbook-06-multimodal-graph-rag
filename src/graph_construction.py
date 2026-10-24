@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 from datetime import datetime, timedelta
-from py2neo import Graph, Node, Relationship
+from src.graph_db import Graph, Node
 import logging
 from tqdm import tqdm
 
@@ -36,32 +36,15 @@ class GraphConstructor:
         """Setup necessary constraints for the graph"""
         logger.info("Setting up Neo4j constraints...")
         
-        # Drop any existing constraints first to avoid conflicts
-        try:
-            self.graph.run("SHOW CONSTRAINTS").data()
-            self.graph.run("DROP CONSTRAINT ON (z:Zone) ASSERT z.zone_id IS UNIQUE")
-        except:
-            logger.info("No Zone constraint to drop")
-            
-        try:
-            self.graph.run("DROP CONSTRAINT ON (a:Asset) ASSERT a.asset_id IS UNIQUE")
-        except:
-            logger.info("No Asset constraint to drop")
-            
-        try:
-            self.graph.run("DROP CONSTRAINT ON (i:Incident) ASSERT i.incident_id IS UNIQUE")
-        except:
-            logger.info("No Incident constraint to drop")
-        
-        # Create new constraints with proper uniqueness
-        self.graph.run("CREATE CONSTRAINT ON (z:Zone) ASSERT z.zone_id IS UNIQUE")
+        # Neo4j 5 and later syntax; IF NOT EXISTS makes a rebuild safe
+        self.graph.run("CREATE CONSTRAINT zone_id IF NOT EXISTS FOR (z:Zone) REQUIRE z.zone_id IS UNIQUE")
         logger.info("Created Zone constraint")
         
         # For Assets, we'll create a composite unique constraint on asset_unique_id
-        self.graph.run("CREATE CONSTRAINT ON (a:Asset) ASSERT a.asset_unique_id IS UNIQUE")
+        self.graph.run("CREATE CONSTRAINT asset_unique_id IF NOT EXISTS FOR (a:Asset) REQUIRE a.asset_unique_id IS UNIQUE")
         logger.info("Created Asset constraint")
         
-        self.graph.run("CREATE CONSTRAINT ON (i:Incident) ASSERT i.incident_id IS UNIQUE")
+        self.graph.run("CREATE CONSTRAINT incident_id IF NOT EXISTS FOR (i:Incident) REQUIRE i.incident_id IS UNIQUE")
         logger.info("Created Incident constraint")
         
         logger.info("Neo4j constraints setup complete")

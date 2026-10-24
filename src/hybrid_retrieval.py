@@ -6,7 +6,7 @@ import logging
 from typing import List, Dict, Any, Optional, Tuple
 from datetime import datetime
 from sentence_transformers import SentenceTransformer
-from py2neo import Graph
+from src.graph_db import Graph
 from sklearn.metrics.pairwise import cosine_similarity
 
 from src.config import DATA_DIR, EMBEDDINGS_DIR, NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD, TOP_K

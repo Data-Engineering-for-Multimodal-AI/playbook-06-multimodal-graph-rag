@@ -7,7 +7,7 @@ enabling location-based insights and regional patterns.
 
 import pandas as pd
 import logging
-from py2neo import Graph, Node, Relationship
+from src.graph_db import Graph, Node
 import math
 import numpy as np
 

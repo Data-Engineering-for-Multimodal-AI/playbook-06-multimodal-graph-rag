@@ -5,7 +5,8 @@ all-MiniLM-L6-v2 and CLIP ViT-B/32 from Hugging Face (about 700 MB).
 
 The graph and cache tests need Neo4j 2026.x and Redis (see the README). They are skipped when the
 services aren't reachable, unless REQUIRE_SERVICES=1 (as in CI). Like `python main.py --mode graph`,
-they replace everything in the Neo4j database the settings point to.
+they replace everything in the Neo4j database the settings point to; in Redis they only add and remove
+their own cache keys.
 """
 
 import csv
@@ -96,6 +97,12 @@ def test_cache_ttls_and_partial_entries():
     r.delete(f"{key}:result:0")                                              # as if the text result had expired
     assert cache.get_from_cache(key) is None
     r.delete(f"{key}:result:1", f"{key}:count", f"{key}:timestamp")
+    # Clear Cache removes only this system's keys
+    r.set("smoke-other-data", b"keep", ex=60)
+    cache.store_in_cache([{"incident_id": "A"}], cache.generate_cache_key("smoke test"))
+    cache.clear_cache()
+    assert r.get("smoke-other-data") == b"keep" and not list(r.scan_iter("query:*"))
+    r.delete("smoke-other-data")
 
 
 def test_cache_mode():
@@ -172,7 +179,18 @@ def test_photo_mode(graph):
 
 
 def test_full_mode_cache_hit(graph):
-    service_or_skip(lambda: __import__("src.edge_cache", fromlist=["x"]).EdgeAwareCache().clear_cache(), "Redis")
+    from src.edge_cache import EdgeAwareCache
+    cache = None
+
+    def connect():
+        nonlocal cache
+        cache = EdgeAwareCache()
+    service_or_skip(connect, "Redis")
+    # Remove only the entry --mode full uses (never flush: the Redis database may hold other data)
+    key = cache.generate_cache_key(query="Tower packet loss", zone_filter="Zone 11")
+    keys = list(cache.redis_client.scan_iter(f"{key}:*"))
+    if keys:
+        cache.redis_client.delete(*keys)
     out = main_py("--mode", "full")
     assert "Cache hit: False" in out and "Cache hit: True" in out
 

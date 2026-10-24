@@ -1,0 +1,43 @@
+[project]
+name = "playbook-06-multimodal-graph-rag"
+version = "2026.10"
+description = "Graph-augmented retrieval and edge-aware caching for telecom incidents: text and drone-image embeddings, Neo4j vector search and graph context, Redis caching, Streamlit UI (Data Engineering for Multimodal AI, Chapter 6)"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=1.26",
+    "pandas>=2.1",
+    "sentence-transformers>=3.0",
+    "transformers>=4.46",
+    "torch>=2.3",
+    # Official Neo4j driver (replaces py2neo, which is end of life); needs a Neo4j 2026.x server
+    "neo4j>=5.28",
+    "redis>=5.0",
+    "streamlit>=1.40",
+    "matplotlib>=3.8",
+    "networkx>=3.2",
+    "pillow>=10.2",
+    "tqdm>=4.66",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+]
+
+[tool.uv]
+package = false
+
+# On Linux, PyPI's torch is the CUDA build (several GB of CUDA libraries plus Triton).
+# This playbook runs on CPU, so Linux gets the CPU build. macOS and Windows use PyPI.
+[tool.uv.sources]
+torch = [{ index = "pytorch-cpu", marker = "sys_platform == 'linux'" }]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

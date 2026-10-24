@@ -36,7 +36,8 @@ class EdgeAwareCache:
                          query: str, 
                          zone_filter: Optional[str] = None,
                          time_range: Optional[Tuple[str, str]] = None,
-                         priority_filter: Optional[str] = None) -> str:
+                         priority_filter: Optional[str] = None,
+                         kind: str = "query") -> str:
         """
         Generate a deterministic cache key based on query parameters
         
@@ -45,6 +46,7 @@ class EdgeAwareCache:
             zone_filter: Optional zone filter
             time_range: Optional time range filter
             priority_filter: Optional priority filter
+            kind: Key prefix, one per kind of result ("query", "photos", "resolutions")
             
         Returns:
             A cache key string
@@ -60,18 +62,20 @@ class EdgeAwareCache:
         # Convert to JSON string and hash
         params_json = json.dumps(query_params, sort_keys=True)
         hash_obj = hashlib.md5(params_json.encode())
-        return f"query:{hash_obj.hexdigest()}"
+        return f"{kind}:{hash_obj.hexdigest()}"
     
-    def store_in_cache(self, results: List[Dict[str, Any]], cache_key: str) -> None:
+    def store_in_cache(self, results: List[Dict[str, Any]], cache_key: str, ttl: Optional[int] = None) -> None:
         """
         Store results in Redis with modality-specific TTLs
         
         Args:
             results: The result list to cache
             cache_key: The cache key
+            ttl: Optional TTL for every result, in place of the per-result modality rule
         """
         try:
             # Apply modality-specific TTLs for each result
+            max_ttl = ttl or TEXT_TTL
             for i, result in enumerate(results):
                 # Store each result individually with its modality-specific TTL
                 result_key = f"{cache_key}:result:{i}"
@@ -85,33 +89,37 @@ class EdgeAwareCache:
                             ('technician' in result and result['technician'])
                 
                 # Determine TTL based on modalities present
-                if has_graph:
-                    ttl = GRAPH_TTL  # Graph data has longest TTL (12 hours)
+                if ttl:
+                    result_ttl = ttl
+                elif has_graph:
+                    result_ttl = GRAPH_TTL  # Graph data has longest TTL (12 hours)
                 elif has_image:
-                    ttl = IMAGE_TTL  # Image data has medium TTL (6 hours)
+                    result_ttl = IMAGE_TTL  # Image data has medium TTL (6 hours)
                 else:
-                    ttl = TEXT_TTL  # Text-only data has shortest TTL (1 hour)
+                    result_ttl = TEXT_TTL  # Text-only data has shortest TTL (1 hour)
+                
+                max_ttl = max(max_ttl, result_ttl)
                 
                 # Store the result with appropriate TTL
                 self.redis_client.setex(
                     result_key,
-                    ttl,
+                    result_ttl,
                     json.dumps(result).encode()
                 )
                 
-                logger.debug(f"Stored result {i} with TTL {ttl} seconds")
+                logger.debug(f"Stored result {i} with TTL {result_ttl} seconds")
             
             # Store the number of results and set a master key
             self.redis_client.setex(
                 f"{cache_key}:count",
-                GRAPH_TTL,  # Use longest TTL for the count
+                max_ttl,  # Use the longest result TTL for the count
                 str(len(results)).encode()
             )
             
             # Store cache timestamp
             self.redis_client.setex(
                 f"{cache_key}:timestamp",
-                GRAPH_TTL,  # Use longest TTL for the timestamp
+                max_ttl,  # Use the longest result TTL for the timestamp
                 str(time.time()).encode()
             )
             
@@ -156,7 +164,9 @@ class EdgeAwareCache:
                     logger.warning(f"Result {i} missing from cache for key {cache_key}")
             
             if len(results) != count:
+                # Some results have expired (shorter TTL): treat it as a miss so the caller fetches fresh results
                 logger.warning(f"Expected {count} results but found {len(results)} for key {cache_key}")
+                return None
             
             logger.info(f"Cache hit for key {cache_key}, retrieved {len(results)} results")
             return results, timestamp

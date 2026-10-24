@@ -4,7 +4,7 @@ The book's author, Vasundra Srinivasan, created everything in this folder: the d
 
 | File | What it is | Used by |
 |---|---|---|
-| `incidents.csv` (100 rows) | Incident ID, description, zone, asset type and ID, timestamp (Feb to Apr 2025), priority, status, resolution summary (empty when open) | Embeddings, graph, retrieval |
+| `incidents.csv` (100 rows) | Incident ID, description, zone, asset type and ID, timestamp (January to April 2025), priority, status, resolution summary (empty when open) | Embeddings, graph, retrieval |
 | `assets (1).csv` (96 rows) | Asset ID, name, type (Router, Tower, Repeater, BTS) and zone | Graph |
 | `zones.csv` (3 rows) | Zone, region and supervisor | Graph |
 | `technicians (1).csv` (51 rows) | Which technician resolved which incident | Graph |

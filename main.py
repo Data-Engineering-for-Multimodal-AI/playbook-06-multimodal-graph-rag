@@ -1,6 +1,7 @@
 import argparse
 import logging
 import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -47,6 +48,23 @@ def run_full_system_test():
     system_main()
     logger.info("Full system test completed.")
 
+def run_photo_search():
+    """Find drone photos from a description and from another photo"""
+    from PIL import Image
+    from src.config import DATA_DIR
+    from src.hybrid_retrieval import HybridRetriever
+    logger.info("Running photo search...")
+    retriever = HybridRetriever()
+    for query in ["solar panels covered in desert dust", "flooded tower base with standing water"]:
+        print(f"\nPhotos matching '{query}':")
+        for photo in retriever.search_images(query, top_k=3):
+            print(f"  {photo['similarity_score']:.4f} {photo['filename']} ({photo['incident_id']}, {photo['status']})")
+    sample = "INC909_tower_muddy_base_flooded.jpeg"
+    print(f"\nPhotos that look like {sample}:")
+    for photo in retriever.search_images(Image.open(DATA_DIR / "drone-images" / sample), top_k=4)[1:]:
+        print(f"  {photo['similarity_score']:.4f} {photo['filename']} ({photo['incident_id']}, {photo['status']})")
+    logger.info("Photo search completed.")
+
 def run_streamlit_app():
     """Run the Streamlit app"""
     logger.info("Starting Streamlit app...")
@@ -54,14 +72,14 @@ def run_streamlit_app():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     env = os.environ.copy()
     env["PYTHONPATH"] = current_dir
-    os.system(f"PYTHONPATH={current_dir} streamlit run {current_dir}/src/streamlit_app.py")
+    subprocess.run([sys.executable, "-m", "streamlit", "run", os.path.join(current_dir, "src", "streamlit_app.py")], env=env)
 
 def main():
     """Main entry point for the application"""
     parser = argparse.ArgumentParser(description='Graph-Augmented Retrieval and Edge-Aware Caching System')
     
     parser.add_argument('--mode', type=str, required=True, 
-                        choices=['embeddings', 'graph', 'retrieval', 'cache', 'full', 'app', 'all'],
+                        choices=['embeddings', 'graph', 'retrieval', 'photos', 'cache', 'full', 'app', 'all'],
                         help='Which component to run')
     
     args = parser.parse_args()
@@ -72,6 +90,8 @@ def main():
         run_graph_construction()
     elif args.mode == 'retrieval':
         run_retrieval_test()
+    elif args.mode == 'photos':
+        run_photo_search()
     elif args.mode == 'cache':
         run_cache_test()
     elif args.mode == 'full':
@@ -83,6 +103,7 @@ def main():
         run_embedding_pipeline()
         run_graph_construction()
         run_retrieval_test()
+        run_photo_search()
         run_cache_test()
         run_full_system_test()
         run_streamlit_app()

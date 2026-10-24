@@ -172,10 +172,14 @@ class EdgeAwareCache:
             return None
     
     def clear_cache(self) -> None:
-        """Clear all cache entries"""
+        """Clear this system's cache entries (and nothing else in the Redis database)"""
         try:
-            self.redis_client.flushdb()
-            logger.info("Cache cleared")
+            deleted = 0
+            for kind in ("query", "photos", "resolutions"):
+                keys = list(self.redis_client.scan_iter(f"{kind}:*"))
+                if keys:
+                    deleted += self.redis_client.delete(*keys)
+            logger.info(f"Cache cleared ({deleted} keys)")
         except Exception as e:
             logger.error(f"Error clearing cache: {e}")
 

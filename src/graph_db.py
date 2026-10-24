@@ -43,7 +43,9 @@ class Node(dict):
 
 class Graph:
     def __init__(self, uri, auth, database=None):
-        self.driver = GraphDatabase.driver(uri, auth=auth)
+        # Server notifications at WARNING and above (deprecations, for example); the INFO ones are
+        # query-planning hints that would print a line for each node the graph step creates
+        self.driver = GraphDatabase.driver(uri, auth=auth, notifications_min_severity="WARNING")
         self.driver.verify_connectivity()
         self.database = database
 

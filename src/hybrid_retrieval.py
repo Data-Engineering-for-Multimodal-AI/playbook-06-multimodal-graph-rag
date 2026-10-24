@@ -1,66 +1,52 @@
+import logging
+from typing import List, Dict, Any, Optional, Tuple, Union
+
 import numpy as np
 import pandas as pd
-import os
-import json
-import logging
-from typing import List, Dict, Any, Optional, Tuple
-from datetime import datetime
+import torch
+from PIL import Image
 from sentence_transformers import SentenceTransformer
-from src.graph_db import Graph
-from sklearn.metrics.pairwise import cosine_similarity
+from transformers import CLIPModel, CLIPProcessor
 
-from src.config import DATA_DIR, EMBEDDINGS_DIR, NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD, TOP_K
+from src.graph_db import Graph
+from src.config import (NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD, TOP_K,
+                        TEXT_VECTOR_INDEX, IMAGE_VECTOR_INDEX)
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+CLIP_MODEL = "openai/clip-vit-base-patch32"
+
+
+def cosine(score: float) -> float:
+    """Neo4j reports cosine similarity rescaled to 0..1 as (1 + cos) / 2; return the cosine itself"""
+    return 2 * score - 1
+
+
 class HybridRetriever:
     def __init__(self):
         self.text_model = None
-        self.text_embeddings = None
-        self.text_incident_ids = None
-        self.image_embeddings = None
-        self.image_incident_ids = None
+        self.clip_model = None
+        self.clip_processor = None
         self.graph = None
-        self.incidents_df = None
-        self.images_df = None
         
         # Load necessary data
         self.load_data()
         self.connect_to_graph()
     
     def load_data(self):
-        """Load embeddings and dataset"""
-        logger.info("Loading embeddings and dataset...")
-        
-        # Load text embeddings
-        text_embeddings_path = os.path.join(EMBEDDINGS_DIR, "text_embeddings.npy")
-        text_incident_ids_path = os.path.join(EMBEDDINGS_DIR, "text_incident_ids.npy")
-        
-        self.text_embeddings = np.load(text_embeddings_path)
-        self.text_incident_ids = np.load(text_incident_ids_path, allow_pickle=True)
-        
-        # Load image embeddings
-        image_embeddings_path = os.path.join(EMBEDDINGS_DIR, "image_embeddings.npy")
-        image_incident_ids_path = os.path.join(EMBEDDINGS_DIR, "image_incident_ids.npy")
-        
-        self.image_embeddings = np.load(image_embeddings_path)
-        self.image_incident_ids = np.load(image_incident_ids_path, allow_pickle=True)
-        
-        # Load incident data
-        incidents_path = os.path.join(DATA_DIR, "incidents.csv")
-        self.incidents_df = pd.read_csv(incidents_path)
-        
-        # Load images data
-        images_path = os.path.join(DATA_DIR, "images.csv")
-        self.images_df = pd.read_csv(images_path)
-        
-        # Load text model for query embedding
+        """Load the query embedding model (the embeddings themselves are stored in Neo4j)"""
         logger.info("Loading text embedding model...")
         self.text_model = SentenceTransformer('all-MiniLM-L6-v2')
-        
         logger.info("Data loading complete")
+    
+    def load_clip(self):
+        """Load CLIP on first use: it embeds text queries and photos into the drone images' space"""
+        if self.clip_model is None:
+            logger.info("Loading CLIP model...")
+            self.clip_model = CLIPModel.from_pretrained(CLIP_MODEL)
+            self.clip_processor = CLIPProcessor.from_pretrained(CLIP_MODEL)
     
     def connect_to_graph(self):
         """Connect to Neo4j database"""
@@ -101,43 +87,34 @@ class HybridRetriever:
         # Embed the query
         query_embedding = self.embed_query(query)
         
-        # Calculate similarity scores with text embeddings
-        similarity_scores = cosine_similarity([query_embedding], self.text_embeddings)[0]
+        # Vector search in Neo4j, then the structured filters on the incident properties.
+        # The sample graph has 100 incidents, so every incident is a candidate and filtering stays exact.
+        start_time, end_time = time_range if time_range else (None, None)
+        to_iso = lambda t: pd.to_datetime(t).strftime('%Y-%m-%dT%H:%M:%S') if t else None
+        results = self.graph.run(f"""
+        MATCH (i:Incident)
+          SEARCH i IN (VECTOR INDEX {TEXT_VECTOR_INDEX} FOR $embedding LIMIT $candidates)
+          SCORE AS score
+        WHERE ($zone IS NULL OR i.zone = $zone)
+          AND ($priority IS NULL OR i.priority = $priority)
+          AND ($start IS NULL OR i.timestamp >= $start)
+          AND ($end IS NULL OR i.timestamp <= $end)
+        RETURN i.incident_id AS incident_id, score AS similarity_score, i.description AS description,
+               i.zone AS zone, i.asset_type AS asset_type, i.asset_id AS asset_id, i.timestamp AS timestamp,
+               i.priority AS priority, i.status AS status, i.resolution_summary AS resolution_summary
+        ORDER BY score DESC
+        LIMIT $top_k
+        """, embedding=query_embedding, candidates=max(top_k, 100), top_k=top_k,
+            zone=zone_filter, priority=priority_filter, start=to_iso(start_time), end=to_iso(end_time))
         
-        # Convert to dataframe for filtering
-        results_df = pd.DataFrame({
-            'incident_id': self.text_incident_ids,
-            'similarity_score': similarity_scores
-        })
-        
-        # Merge with incidents dataframe to apply structured filters
-        results_df = results_df.merge(self.incidents_df, on='incident_id', how='inner')
-        
-        # Apply zone filter if provided
+        for result in results:
+            result['similarity_score'] = cosine(result['similarity_score'])
         if zone_filter:
-            results_df = results_df[results_df['zone'] == zone_filter]
             logger.info(f"Applied zone filter: {zone_filter}")
-        
-        # Apply time range filter if provided
         if time_range:
-            start_time, end_time = time_range
-            results_df['timestamp'] = pd.to_datetime(results_df['timestamp'])
-            results_df = results_df[
-                (results_df['timestamp'] >= pd.to_datetime(start_time)) & 
-                (results_df['timestamp'] <= pd.to_datetime(end_time))
-            ]
             logger.info(f"Applied time range filter: {start_time} to {end_time}")
-        
-        # Apply priority filter if provided
         if priority_filter:
-            results_df = results_df[results_df['priority'] == priority_filter]
             logger.info(f"Applied priority filter: {priority_filter}")
-        
-        # Sort by similarity score and get top-k results
-        results_df = results_df.sort_values('similarity_score', ascending=False).head(top_k)
-        
-        # Convert to list of dictionaries
-        results = results_df.to_dict('records')
         
         logger.info(f"Retrieved {len(results)} results from semantic search")
         return results
@@ -196,15 +173,6 @@ class HybridRetriever:
             enriched_result['asset_details'] = asset_info[0] if asset_info else None
             enriched_result['image'] = image_info[0] if image_info else None
             
-            # Get supplementary image info from images_df if not found in graph
-            if not enriched_result['image']:
-                image_row = self.images_df[self.images_df['incident_id'] == incident_id]
-                if not image_row.empty:
-                    enriched_result['image'] = {
-                        'filename': image_row.iloc[0]['image_filename'],
-                        'caption': image_row.iloc[0]['caption']
-                    }
-            
             enriched_results.append(enriched_result)
         
         logger.info("Graph enrichment complete")
@@ -243,6 +211,55 @@ class HybridRetriever:
         
         return enriched_results
 
+    def embed_for_images(self, query: Union[str, Image.Image]) -> np.ndarray:
+        """CLIP embedding of a text query or a photo, comparable with the drone image embeddings"""
+        self.load_clip()
+        with torch.no_grad():
+            if isinstance(query, str):
+                inputs = self.clip_processor(text=[query], return_tensors="pt", padding=True)
+                outputs = self.clip_model.get_text_features(**inputs)
+            else:
+                inputs = self.clip_processor(images=query.convert('RGB'), return_tensors="pt")
+                outputs = self.clip_model.get_image_features(**inputs)
+        return getattr(outputs, "pooler_output", outputs)[0].numpy()
+    
+    def search_images(self, query: Union[str, Image.Image], top_k: int = 3) -> List[Dict[str, Any]]:
+        """
+        Find drone images that match a text description or look like a given photo,
+        with the incident each image belongs to
+        """
+        logger.info("Searching drone images...")
+        return [dict(r, similarity_score=cosine(r['similarity_score'])) for r in self.graph.run(f"""
+        MATCH (img:Image)
+          SEARCH img IN (VECTOR INDEX {IMAGE_VECTOR_INDEX} FOR $embedding LIMIT $top_k)
+          SCORE AS score
+        MATCH (i:Incident)-[:HAS_IMAGE]->(img)
+        RETURN img.image_filename AS filename, img.caption AS caption, score AS similarity_score,
+               i.incident_id AS incident_id, i.description AS description, i.zone AS zone,
+               i.status AS status, i.resolution_summary AS resolution_summary
+        ORDER BY score DESC
+        """, embedding=self.embed_for_images(query), top_k=top_k)]
+    
+    def similar_resolutions(self, query: str, neighbors: int = 10) -> List[Dict[str, Any]]:
+        """
+        How were incidents like this resolved? Takes the most similar resolved incidents,
+        follows RESOLVED_BY to the technicians, and groups them by resolution
+        """
+        logger.info("Looking up how similar incidents were resolved...")
+        return self.graph.run(f"""
+        MATCH (i:Incident)
+          SEARCH i IN (VECTOR INDEX {TEXT_VECTOR_INDEX} FOR $embedding LIMIT 100)
+          SCORE AS score
+        WHERE i.status = 'Resolved' AND i.resolution_summary <> ''
+        WITH i, score ORDER BY score DESC LIMIT $neighbors
+        OPTIONAL MATCH (i)-[:RESOLVED_BY]->(t:Technician)
+        WITH i.resolution_summary AS resolution, i, score, t
+        ORDER BY score DESC
+        RETURN resolution, count(DISTINCT i) AS incidents, collect(DISTINCT i.incident_id) AS incident_ids,
+               collect(DISTINCT t.technician_id) AS technicians, round(2 * max(score) - 1, 4) AS best_similarity
+        ORDER BY incidents DESC, best_similarity DESC
+        """, embedding=self.embed_query(query), neighbors=neighbors)
+
 def main():
     """Test the hybrid retriever"""
     retriever = HybridRetriever()
@@ -279,6 +296,18 @@ def main():
             print(f"\nZone Details:")
             print(f"  Region: {result['zone_details']['region']}")
             print(f"  Supervisor: {result['zone_details']['supervisor']}")
+    
+    # How similar resolved incidents were fixed (through the RESOLVED_BY edges)
+    print(f"\nHow similar resolved incidents were fixed:")
+    for row in retriever.similar_resolutions(test_query):
+        print(f"  {row['incidents']} x {row['resolution']} "
+              f"({', '.join(row['incident_ids'])}; technicians: {', '.join(row['technicians']) or 'none recorded'})")
+    
+    # Drone images that match a visual description (CLIP text-to-image search)
+    image_query = "tower overgrown by trees in a forest"
+    print(f"\nDrone images matching '{image_query}':")
+    for photo in retriever.search_images(image_query, top_k=3):
+        print(f"  {photo['similarity_score']:.4f} {photo['filename']} ({photo['incident_id']}, {photo['status']})")
 
 if __name__ == "__main__":
     main() 

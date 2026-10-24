@@ -7,7 +7,7 @@ to enhance the graph's retrieval capabilities.
 
 import pandas as pd
 import logging
-from py2neo import Graph, Node, Relationship
+from src.graph_db import Graph, Node
 
 from src.config import NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD
 

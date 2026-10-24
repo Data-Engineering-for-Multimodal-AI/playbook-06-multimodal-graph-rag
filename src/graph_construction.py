@@ -1,11 +1,14 @@
 import os
 import pandas as pd
 from datetime import datetime, timedelta
-from py2neo import Graph, Node, Relationship
+from src.graph_db import Graph, Node
 import logging
 from tqdm import tqdm
 
-from src.config import DATA_DIR, NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD
+import numpy as np
+
+from src.config import (DATA_DIR, EMBEDDINGS_DIR, NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD,
+                        TEXT_VECTOR_INDEX, IMAGE_VECTOR_INDEX)
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -36,32 +39,15 @@ class GraphConstructor:
         """Setup necessary constraints for the graph"""
         logger.info("Setting up Neo4j constraints...")
         
-        # Drop any existing constraints first to avoid conflicts
-        try:
-            self.graph.run("SHOW CONSTRAINTS").data()
-            self.graph.run("DROP CONSTRAINT ON (z:Zone) ASSERT z.zone_id IS UNIQUE")
-        except:
-            logger.info("No Zone constraint to drop")
-            
-        try:
-            self.graph.run("DROP CONSTRAINT ON (a:Asset) ASSERT a.asset_id IS UNIQUE")
-        except:
-            logger.info("No Asset constraint to drop")
-            
-        try:
-            self.graph.run("DROP CONSTRAINT ON (i:Incident) ASSERT i.incident_id IS UNIQUE")
-        except:
-            logger.info("No Incident constraint to drop")
-        
-        # Create new constraints with proper uniqueness
-        self.graph.run("CREATE CONSTRAINT ON (z:Zone) ASSERT z.zone_id IS UNIQUE")
+        # Neo4j 5 and later syntax; IF NOT EXISTS makes a rebuild safe
+        self.graph.run("CREATE CONSTRAINT zone_id IF NOT EXISTS FOR (z:Zone) REQUIRE z.zone_id IS UNIQUE")
         logger.info("Created Zone constraint")
         
         # For Assets, we'll create a composite unique constraint on asset_unique_id
-        self.graph.run("CREATE CONSTRAINT ON (a:Asset) ASSERT a.asset_unique_id IS UNIQUE")
+        self.graph.run("CREATE CONSTRAINT asset_unique_id IF NOT EXISTS FOR (a:Asset) REQUIRE a.asset_unique_id IS UNIQUE")
         logger.info("Created Asset constraint")
         
-        self.graph.run("CREATE CONSTRAINT ON (i:Incident) ASSERT i.incident_id IS UNIQUE")
+        self.graph.run("CREATE CONSTRAINT incident_id IF NOT EXISTS FOR (i:Incident) REQUIRE i.incident_id IS UNIQUE")
         logger.info("Created Incident constraint")
         
         logger.info("Neo4j constraints setup complete")
@@ -228,6 +214,36 @@ class GraphConstructor:
         
         logger.info("Image nodes and relationships created")
     
+    def add_embeddings(self):
+        """Store the text and image embeddings on the nodes and index them for vector search"""
+        logger.info("Adding embeddings and vector indexes...")
+        
+        def load(name):
+            path = os.path.join(EMBEDDINGS_DIR, name)
+            if not os.path.exists(path):
+                raise FileNotFoundError(f"{path} not found: run `python main.py --mode embeddings` first")
+            return np.load(path, allow_pickle=True)
+        
+        sets = [
+            ("Incident", "incident_id", "text_embedding", TEXT_VECTOR_INDEX,
+             load("text_incident_ids.npy"), load("text_embeddings.npy")),
+            ("Image", "incident_id", "clip_embedding", IMAGE_VECTOR_INDEX,
+             load("image_incident_ids.npy"), load("image_embeddings.npy")),
+        ]
+        for label, key, prop, index, ids, vectors in sets:
+            rows = [{"id": str(i), "vector": v.astype(float).tolist()} for i, v in zip(ids, vectors)]
+            self.graph.run(f"""
+            UNWIND $rows AS row
+            MATCH (n:{label} {{{key}: row.id}})
+            CALL db.create.setNodeVectorProperty(n, '{prop}', row.vector)
+            """, rows=rows)
+            self.graph.run(f"""
+            CREATE VECTOR INDEX {index} IF NOT EXISTS FOR (n:{label}) ON n.{prop}
+            OPTIONS {{indexConfig: {{`vector.dimensions`: {vectors.shape[1]}, `vector.similarity_function`: 'cosine'}}}}
+            """)
+            logger.info(f"Stored {len(rows)} {label} embeddings ({vectors.shape[1]} numbers) in index {index}")
+        self.graph.run("CALL db.awaitIndexes(300)")
+    
     def create_related_incident_edges(self):
         """Create 'RELATED_TO' edges between incidents based on shared assets and time proximity"""
         logger.info("Creating 'RELATED_TO' edges between incidents...")
@@ -291,6 +307,7 @@ class GraphConstructor:
         self.create_technician_relationships()
         self.create_image_nodes()
         self.create_related_incident_edges()
+        self.add_embeddings()
         
         logger.info("Graph construction complete")
 

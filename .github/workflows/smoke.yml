@@ -1,0 +1,52 @@
+name: smoke
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    # Embeddings, the Neo4j graph and vector search, photo search, the Redis cache and the UI (CPU)
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13"]
+    services:
+      neo4j:
+        image: neo4j:2026.10
+        env:
+          NEO4J_AUTH: neo4j/changeThisPassword
+        ports:
+          - 7687:7687
+        options: >-
+          --health-cmd "cypher-shell -u neo4j -p changeThisPassword 'RETURN 1'"
+          --health-interval 5s --health-timeout 10s --health-retries 30
+      redis:
+        image: redis:8
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      UV_PYTHON: ${{ matrix.python-version }}
+      REQUIRE_SERVICES: "1"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.3.0
+      - name: Cache the Hugging Face models
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/huggingface
+          key: hf-minilm-l6-v2-clip-vit-b32
+      - name: Smoke test
+        run: make smoke
+      - name: Printed install path (pip install -r requirements.txt) and the printed commands
+        run: |
+          uv venv --seed --python ${{ matrix.python-version }} /tmp/pipenv
+          /tmp/pipenv/bin/python -m pip install -q -r requirements.txt
+          /tmp/pipenv/bin/python main.py --mode embeddings
+          /tmp/pipenv/bin/python main.py --mode graph
+          /tmp/pipenv/bin/python main.py --mode retrieval
+          /tmp/pipenv/bin/python main.py --mode full

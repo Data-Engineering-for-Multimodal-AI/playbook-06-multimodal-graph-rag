@@ -91,13 +91,18 @@ class EmbeddingPipeline:
                 # Generate image embedding
                 with torch.no_grad():
                     outputs = self.image_model.get_image_features(**inputs)
-                    embedding = outputs.detach().cpu().numpy()[0]
+                    # Transformers 5 returns an output object; the projected image embedding is its pooler_output
+                    features = getattr(outputs, "pooler_output", outputs)
+                    embedding = features.detach().cpu().numpy()[0]
                 
                 all_embeddings.append(embedding)
                 incident_ids.append(incident_id)
             except Exception as e:
                 logger.error(f"Error processing image {image_filename}: {e}")
         
+        if len(all_embeddings) != len(images_df):
+            raise RuntimeError(f"Embedded {len(all_embeddings)} of {len(images_df)} images; see the errors above")
+
         # Convert list of embeddings to numpy array
         embeddings_array = np.array(all_embeddings)
         

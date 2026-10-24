@@ -1,0 +1,2 @@
+# False positive: notifications_min_severity="WARNING" (a Neo4j driver setting, not a key) in an earlier commit
+2e244d923e216f3f4b375653602afb3ae0a4dc7d:src/graph_db.py:generic-api-key:48

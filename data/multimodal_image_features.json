@@ -19,7 +19,7 @@
       ],
       "environment": "forest",
       "caption": "Drone photo of telecom tower in forest, showing antennas and structural frame.",
-      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC900_tower_forest_inspection.jpeg"
+      "image_path": "data/drone-images/INC900_tower_forest_inspection.jpeg"
     },
     {
       "image_id": "INC901_bts_environmental_fatigue_desert.jpeg",
@@ -44,7 +44,7 @@
       ],
       "environment": "desert",
       "caption": "Desert BTS with visible signs of weathering and fatigue on the frame.",
-      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC901_bts_environmental_fatigue_desert.jpeg"
+      "image_path": "data/drone-images/INC901_bts_environmental_fatigue_desert.jpeg"
     },
     {
       "image_id": "INC902_bts_power_unit_failure.jpeg",
@@ -56,7 +56,7 @@
       "all_features": [],
       "environment": "unknown",
       "caption": "BTS station showing disconnected power unit in remote location.",
-      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC902_bts_power_unit_failure.jpeg"
+      "image_path": "data/drone-images/INC902_bts_power_unit_failure.jpeg"
     },
     {
       "image_id": "INC903_repeater_missing_panel_zone11.jpeg",
@@ -81,7 +81,7 @@
       ],
       "environment": "unknown",
       "caption": "Repeater with missing panel, partially obscured in vegetation of Zone 11.",
-      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC903_repeater_missing_panel_zone11.jpeg"
+      "image_path": "data/drone-images/INC903_repeater_missing_panel_zone11.jpeg"
     },
     {
       "image_id": "INC904_rooftop_5g_node_sunset.jpeg",
@@ -93,7 +93,7 @@
       "all_features": [],
       "environment": "urban",
       "caption": "5G rooftop node captured at sunset, urban skyline visible.",
-      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC904_rooftop_5g_node_sunset.jpeg"
+      "image_path": "data/drone-images/INC904_rooftop_5g_node_sunset.jpeg"
     },
     {
       "image_id": "INC905_bts_desert_solar_damage.jpeg",
@@ -114,7 +114,7 @@
       ],
       "environment": "desert",
       "caption": "Solar panels damaged on BTS station in arid desert environment.",
-      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC905_bts_desert_solar_damage.jpeg"
+      "image_path": "data/drone-images/INC905_bts_desert_solar_damage.jpeg"
     },
     {
       "image_id": "INC906_bts_standing_water_foundation.jpeg",
@@ -131,7 +131,7 @@
       ],
       "environment": "unknown",
       "caption": "Flooded foundation at BTS site, with water pooling around base.",
-      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC906_bts_standing_water_foundation.jpeg"
+      "image_path": "data/drone-images/INC906_bts_standing_water_foundation.jpeg"
     },
     {
       "image_id": "INC907_tower_urban_cabling_loose.jpeg",
@@ -156,7 +156,7 @@
       ],
       "environment": "urban",
       "caption": "Loose cabling observed at urban tower during inspection.",
-      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC907_tower_urban_cabling_loose.jpeg"
+      "image_path": "data/drone-images/INC907_tower_urban_cabling_loose.jpeg"
     },
     {
       "image_id": "INC908_bts_environmental_fatigue_desert.jpeg",
@@ -181,7 +181,7 @@
       ],
       "environment": "desert",
       "caption": "Severe weathering on BTS in desert, panels misaligned and faded.",
-      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC908_bts_environmental_fatigue_desert.jpeg"
+      "image_path": "data/drone-images/INC908_bts_environmental_fatigue_desert.jpeg"
     },
     {
       "image_id": "INC909_tower_muddy_base_flooded.jpeg",
@@ -198,7 +198,7 @@
       ],
       "environment": "unknown",
       "caption": "Tower standing on muddy base, signs of flooding and soft ground.",
-      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC909_tower_muddy_base_flooded.jpeg"
+      "image_path": "data/drone-images/INC909_tower_muddy_base_flooded.jpeg"
     },
     {
       "image_id": "INC910_5g_node_rooftop_rain_rust.jpeg",
@@ -219,7 +219,7 @@
       ],
       "environment": "rooftop",
       "caption": "Rust on rooftop-mounted 5G node, water stains on surrounding surface.",
-      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC910_5g_node_rooftop_rain_rust.jpeg"
+      "image_path": "data/drone-images/INC910_5g_node_rooftop_rain_rust.jpeg"
     },
     {
       "image_id": "INC911_repeater_dusty_solar_array.jpeg",
@@ -236,7 +236,7 @@
       ],
       "environment": "unknown",
       "caption": "Dust-covered solar array attached to repeater station in remote zone.",
-      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC911_repeater_dusty_solar_array.jpeg"
+      "image_path": "data/drone-images/INC911_repeater_dusty_solar_array.jpeg"
     },
     {
       "image_id": "INC912_tower_forest_canopy_obstructed.jpeg",
@@ -253,7 +253,7 @@
       ],
       "environment": "forest",
       "caption": "Canopy obstructing line of sight for tower antennas in forested zone.",
-      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC912_tower_forest_canopy_obstructed.jpeg"
+      "image_path": "data/drone-images/INC912_tower_forest_canopy_obstructed.jpeg"
     },
     {
       "image_id": "INC913_tower_structural_tilt_hilltop.jpeg",
@@ -278,7 +278,7 @@
       ],
       "environment": "hilltop",
       "caption": "Structural tilt noted in hilltop tower; mounting brackets strained.",
-      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC913_tower_structural_tilt_hilltop.jpeg"
+      "image_path": "data/drone-images/INC913_tower_structural_tilt_hilltop.jpeg"
     },
     {
       "image_id": "INC914_router_loose_cable_urban.jpeg",
@@ -299,7 +299,7 @@
       ],
       "environment": "urban",
       "caption": "Urban router with visibly loose cabling on rooftop infrastructure.",
-      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC914_router_loose_cable_urban.jpeg"
+      "image_path": "data/drone-images/INC914_router_loose_cable_urban.jpeg"
     },
     {
       "image_id": "INC915_tower_overloaded_mast_city.jpeg",
@@ -316,7 +316,7 @@
       ],
       "environment": "unknown",
       "caption": "Overloaded mast in dense city environment with multiple attachments.",
-      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC915_tower_overloaded_mast_city.jpeg"
+      "image_path": "data/drone-images/INC915_tower_overloaded_mast_city.jpeg"
     },
     {
       "image_id": "INC916_tower_forest_zone12_moisture.jpeg",
@@ -337,7 +337,7 @@
       ],
       "environment": "forest",
       "caption": "Moisture buildup around forest tower, vegetation encroaching base.",
-      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC916_tower_forest_zone12_moisture.jpeg"
+      "image_path": "data/drone-images/INC916_tower_forest_zone12_moisture.jpeg"
     },
     {
       "image_id": "INC917_tower_overgrown_branches_zone14.jpeg",
@@ -358,7 +358,7 @@
       ],
       "environment": "unknown",
       "caption": "Foliage interfering with tower components in Zone 14.",
-      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC917_tower_overgrown_branches_zone14.jpeg"
+      "image_path": "data/drone-images/INC917_tower_overgrown_branches_zone14.jpeg"
     },
     {
       "image_id": "INC918_bts_standing_water_foundation.jpeg",
@@ -375,7 +375,7 @@
       ],
       "environment": "unknown",
       "caption": "Foundation of BTS surrounded by standing water, risk of short circuit.",
-      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC918_bts_standing_water_foundation.jpeg"
+      "image_path": "data/drone-images/INC918_bts_standing_water_foundation.jpeg"
     },
     {
       "image_id": "INC919_tower_alignment_issue_high_winds.jpeg",
@@ -392,7 +392,7 @@
       ],
       "environment": "unknown",
       "caption": "Alignment deviation on tower caused by sustained high winds.",
-      "image_path": "/Users/vasundras/Desktop/pb6-graph-aug-retrieval/data/drone-images/INC919_tower_alignment_issue_high_winds.jpeg"
+      "image_path": "data/drone-images/INC919_tower_alignment_issue_high_winds.jpeg"
     }
   ],
   "environmental_context": [

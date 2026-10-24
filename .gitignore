@@ -54,3 +54,7 @@ coverage.xml
 # Project specific
 *.log
 embeddings/ 
+# Local settings and audit notes
+.env
+AUDIT.md
+.pytest_cache/

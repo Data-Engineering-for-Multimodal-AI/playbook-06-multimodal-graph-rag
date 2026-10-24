@@ -25,4 +25,8 @@ IMAGE_TTL = 21600  # 6 hours
 GRAPH_TTL = 43200  # 12 hours
 
 # Retrieval parameters
-TOP_K = 5 
+TOP_K = 5
+
+# Neo4j vector indexes over the embeddings stored on the nodes
+TEXT_VECTOR_INDEX = "incident_text_embedding"   # Incident.text_embedding, all-MiniLM-L6-v2, 384 numbers
+IMAGE_VECTOR_INDEX = "image_clip_embedding"     # Image.clip_embedding, CLIP ViT-B/32, 512 numbers 

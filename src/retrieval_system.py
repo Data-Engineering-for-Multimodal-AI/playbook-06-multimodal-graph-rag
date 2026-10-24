@@ -1,10 +1,13 @@
 import time
+import hashlib
 import logging
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Callable, Dict, Any, List, Optional, Tuple, Union
+
+from PIL import Image
 
 from src.hybrid_retrieval import HybridRetriever
 from src.edge_cache import EdgeAwareCache
-from src.config import TOP_K
+from src.config import TOP_K, TEXT_TTL, IMAGE_TTL
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -96,6 +99,37 @@ class RetrievalSystem:
         }
         
         return response
+
+    def _cached(self, kind: str, key: str, ttl: int, compute: Callable[[], List[Dict[str, Any]]],
+                use_cache: bool) -> Dict[str, Any]:
+        """Look up `kind` results in the cache, or compute and store them with the given TTL"""
+        start_time = time.time()
+        cache_key = self.cache.generate_cache_key(query=key, kind=kind)
+        cached = self.cache.get_from_cache(cache_key) if use_cache else None
+        results = cached[0] if cached else compute()
+        if results and use_cache and not cached:
+            self.cache.store_in_cache(results, cache_key, ttl=ttl)
+        return {
+            'results': results,
+            'performance': {
+                'retrieval_time_ms': round((time.time() - start_time) * 1000, 2),
+                'cache_hit': cached is not None,
+            }
+        }
+    
+    def search_photos(self, query: Union[str, Image.Image], top_k: int = 3, use_cache: bool = True) -> Dict[str, Any]:
+        """Drone photos matching a description or a photo, cached with the image TTL"""
+        if isinstance(query, str):
+            key = f"text:{query}:{top_k}"
+        else:
+            key = f"image:{hashlib.md5(query.convert('RGB').tobytes()).hexdigest()}:{top_k}"
+        return self._cached("photos", key, IMAGE_TTL,
+                            lambda: self.retriever.search_images(query, top_k=top_k), use_cache)
+    
+    def similar_resolutions(self, query: str, use_cache: bool = True) -> Dict[str, Any]:
+        """How the nearest resolved incidents were fixed, cached with the text TTL"""
+        return self._cached("resolutions", query, TEXT_TTL,
+                            lambda: self.retriever.similar_resolutions(query), use_cache)
 
 def main():
     """Test the retrieval system"""

@@ -101,26 +101,22 @@ class EdgeAwareCache:
                 max_ttl = max(max_ttl, result_ttl)
                 
                 # Store the result with appropriate TTL
-                self.redis_client.setex(
-                    result_key,
-                    result_ttl,
-                    json.dumps(result).encode()
-                )
+                self.redis_client.set(result_key, json.dumps(result).encode(), ex=result_ttl)
                 
                 logger.debug(f"Stored result {i} with TTL {result_ttl} seconds")
             
             # Store the number of results and set a master key
-            self.redis_client.setex(
+            self.redis_client.set(
                 f"{cache_key}:count",
-                max_ttl,  # Use the longest result TTL for the count
-                str(len(results)).encode()
+                str(len(results)).encode(),
+                ex=max_ttl  # Use the longest result TTL for the count
             )
             
             # Store cache timestamp
-            self.redis_client.setex(
+            self.redis_client.set(
                 f"{cache_key}:timestamp",
-                max_ttl,  # Use the longest result TTL for the timestamp
-                str(time.time()).encode()
+                str(time.time()).encode(),
+                ex=max_ttl  # Use the longest result TTL for the timestamp
             )
             
             logger.info(f"Cached {len(results)} results with key {cache_key}")

@@ -1,6 +1,6 @@
 # Sample data
 
-The book's author, Vasundra Srinivasan, created everything in this folder: the drone inspection images (made with a generative image model) and the synthetic incident, asset, zone, technician and log records. The incidents, assets, towers, zones, supervisors ("Alice J.", "Bob K.", "Chandra M.") and technicians are fictional. Like the code, the data is released under the MIT License (see [LICENSE](../LICENSE)).
+The book's author, Vasundra Srinivasan, created everything in this folder: the drone inspection images and the synthetic incident, asset, zone, technician and log records. The incidents, assets, towers, zones, supervisors ("Alice J.", "Bob K.", "Chandra M.") and technicians are fictional. Like the code, the data is released under the MIT License (see [LICENSE](../LICENSE)).
 
 | File | What it is | Used by |
 |---|---|---|

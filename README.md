@@ -1,6 +1,6 @@
 # Engineering Graph-Augmented Retrieval and Edge-Aware Caching for Multimodal AI
 
-**Chapter 6 playbook** from *Data Engineering for Multimodal AI* (O'Reilly, 2026). Page numbers to be confirmed.
+**Chapter 6 playbook** from *Data Engineering for Multimodal AI* (O'Reilly, 2026), pages 204–218 (Early Release page numbers; they may differ in the final print).
 Book: https://oreil.ly/data-engineering-multimodal
 
 > Want the code exactly as printed? Use the `first-edition` tag. This branch is the 2026 maintenance update; see [Differences from the printed book](#differences-from-the-printed-book).
@@ -162,12 +162,14 @@ Every command in this README was run from a fresh clone of this branch on Python
 
 ## Differences from the printed book
 
-| What | Printed book | Now | Why |
+The "First edition" column is the code at the `first-edition` tag, which the book describes.
+
+| What | First edition | Now | Why |
 |---|---|---|---|
 | Python | 3.8+ | 3.12+ | Current dependencies |
 | `pip install -r requirements.txt` | Failed on Python 3.12 and later (torch 2.0.1 has no wheels for them) | Works; pinned from `uv.lock`, PyTorch CPU build on Linux | Install on current Python |
 | Neo4j library | py2neo | The official `neo4j` driver, through a small `src/graph_db.py` | py2neo is end of life (its maintainers recommend the official driver) |
-| Neo4j server | 4.x (its constraint syntax; 4.4 reached end of life in November 2025) | 2026.x | Current release; vector indexes and the `SEARCH` clause |
+| Neo4j server | 4.x (its constraint syntax; 4.4 reached end of life in November 2025); the book names no version | 2026.x | Current release; vector indexes and the `SEARCH` clause |
 | Graph constraints | `CREATE CONSTRAINT ON ... ASSERT` | `CREATE CONSTRAINT IF NOT EXISTS FOR ... REQUIRE` | The old syntax was removed in Neo4j 5; on 4.4 a second `--mode graph` failed |
 | Image embeddings | Every image failed on current Transformers and the step still finished (0 image embeddings) | All 20 images; the step fails if any image fails | Transformers 5 returns an output object from `get_image_features` |
 | Vector search | NumPy and scikit-learn over the `.npy` files, filters in pandas | Embeddings stored on the nodes; Neo4j vector index and `SEARCH`, filters in the same query | Retrieval and graph in one place, as current Neo4j supports; the scores are unchanged |
@@ -177,7 +179,7 @@ Every command in this README was run from a fresh clone of this branch on Python
 | Cache expiry | An entry whose results had expired still counted as a hit, with fewer or no results | It counts as a miss | Bug |
 | Clear Cache (UI) | Erased the whole Redis database (`FLUSHDB`) | Deletes this system's keys only | It could erase other data in the same Redis |
 | `redis` calls | `setex` | `set(..., ex=...)` | `setex` is deprecated in redis-py 8 |
-| Streamlit UI | `streamlit run` from the shell, listening on every network interface | `python -m streamlit`, on 127.0.0.1 (`HOST` to change) | Works without the venv on PATH; local by default |
+| Streamlit UI | `streamlit run` from the shell, listening on every network interface | The book's `python -m streamlit run src/streamlit_app.py` (page 214) or `python main.py --mode app`, on 127.0.0.1 (`.streamlit/config.toml`; `HOST` with `--mode app`) | Works without the venv on PATH; local by default |
 | `--mode` choices | embeddings, graph, retrieval, cache, full, app, all | Same, plus `photos` | New photo search |
 | `data/logs.jsonl` | Python dict reprs (not JSON) | JSON Lines, same records | Valid JSON |
 | `data/multimodal_image_features.json` | Absolute paths from the author's computer | Paths relative to the repository | Portable, no personal paths |
@@ -198,7 +200,7 @@ Details are in [CHANGELOG.md](CHANGELOG.md).
 
 ## Expected output
 
-From a fresh clone on 2026-10-23, macOS 26.5.1 (arm64), Python 3.12.15, Neo4j 2026.10.1, Redis 8.10.2. Log lines and progress bars are left out.
+From a fresh clone on 2026-10-23, macOS 26.5.1 (arm64), Python 3.12.15, Neo4j 2026.10.1, Redis 8.10.2. Log lines and progress bars are left out. This is the output of this version; it may differ from the output printed in the book, and that's okay.
 
 `python main.py --mode graph` (log, last lines):
 

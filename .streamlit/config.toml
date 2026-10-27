@@ -1,0 +1,4 @@
+# The book's `python -m streamlit run src/streamlit_app.py` (page 214) listens on this machine only.
+# For other machines: python -m streamlit run src/streamlit_app.py --server.address 0.0.0.0
+[server]
+address = "127.0.0.1"

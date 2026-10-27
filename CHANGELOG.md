@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026.10.1 (2026-10-27)
+
+Checked against the book (Early Release, pages 204–218).
+
+### Changed
+- `.streamlit/config.toml`: the book's `python -m streamlit run src/streamlit_app.py` (page 214)
+  listens on 127.0.0.1, like `python main.py --mode app`.
+- README: page numbers; the differences table's left column is the first edition.
+
 ## 2026.10 (2026-10-23): 2026 maintenance update
 
 The printed version is tagged `first-edition`.

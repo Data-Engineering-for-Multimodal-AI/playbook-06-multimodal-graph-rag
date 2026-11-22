@@ -268,7 +268,7 @@ This playbook runs on one machine with 100 sample incidents. Before you run some
 | Where you run it | Cost |
 |---|---|
 | Your machine | $0. Everything runs locally: no API keys, no paid services. About 3.5 GB of disk on a Mac: 1.2 GB for the environment, 1.2 GB for the two models in the Hugging Face cache, and 1.3 GB for the Neo4j and Redis images. |
-| A GitHub Codespace (4 cores, 16 GB, the size this repo asks for) | Estimated $0.36 per hour at GitHub's list price (November 2026). A free personal account includes 120 core-hours a month, about 30 hours on this machine. CODESPACE_CI_LINE |
+| A GitHub Codespace (4 cores, 16 GB, the size this repo asks for) | Estimated $0.36 per hour at GitHub's list price (November 2026). A free personal account includes 120 core-hours a month, about 30 hours on this machine. In CI, `make run` in a clean devcontainer (starting Neo4j and Redis included) took 87 s; the whole job, with the container build, took 3 to 5 minutes. |
 
 ## How it works
 

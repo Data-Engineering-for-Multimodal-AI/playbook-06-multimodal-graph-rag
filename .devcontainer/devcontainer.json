@@ -1,0 +1,45 @@
+{
+  "name": "Playbook 06: graph RAG with edge caching",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "moby": false,
+      "iptablesSwitchAtRuntime": false
+    }
+  },
+  "hostRequirements": {
+    "cpus": 4,
+    "memory": "16gb"
+  },
+  "onCreateCommand": "pip install --no-cache-dir uv==0.13.0",
+  "postCreateCommand": "make setup",
+  "postStartCommand": "docker info > /dev/null 2>&1 || (sudo update-alternatives --set iptables /usr/sbin/iptables-nft && sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-nft && /usr/local/share/docker-init.sh && docker info > /dev/null)",
+  "forwardPorts": [
+    8501,
+    7474,
+    7687
+  ],
+  "portsAttributes": {
+    "8501": {
+      "label": "Streamlit UI"
+    },
+    "7474": {
+      "label": "Neo4j Browser"
+    },
+    "7687": {
+      "label": "Neo4j Bolt"
+    }
+  },
+  "customizations": {
+    "codespaces": {
+      "openFiles": [
+        "README.md"
+      ]
+    },
+    "vscode": {
+      "extensions": [
+        "ms-python.python"
+      ]
+    }
+  }
+}

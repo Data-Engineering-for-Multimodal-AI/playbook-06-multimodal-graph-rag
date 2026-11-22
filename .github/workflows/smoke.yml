@@ -4,6 +4,8 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * 1"   # weekly, Monday 06:00 UTC, so breakage in upstream packages shows up
 
 jobs:
   smoke:
@@ -42,6 +44,32 @@ jobs:
           key: hf-minilm-l6-v2-clip-vit-b32
       - name: Smoke test
         run: make smoke
+      - name: One-command run
+        run: make run | tee /tmp/run.txt
+      # README "Run it", steps 3-4: the key output lines, then a search twice (miss, then hit)
+      - name: Run it, steps 3-4
+        run: |
+          grep -q "Incident ID: INC903" /tmp/run.txt
+          grep -q "Cache hit: True" /tmp/run.txt
+          make search Q="router keeps rebooting after a firmware update" PRIORITY=High | tee /tmp/s1.txt
+          grep -q "INC957  Zone 11  High" /tmp/s1.txt
+          grep -q "Cache miss" /tmp/s1.txt
+          make search Q="router keeps rebooting after a firmware update" PRIORITY=High | tee /tmp/s2.txt
+          grep -q "Cache hit" /tmp/s2.txt
+          make photos IMAGE=data/drone-images/INC917_tower_overgrown_branches_zone14.jpeg | tee /tmp/p.txt
+          grep -q "1.0000  INC917_tower_overgrown_branches_zone14.jpeg" /tmp/p.txt
+      - name: Try this 1-3
+        run: |
+          make try-filter-candidates | tee /tmp/t1.txt
+          grep -q "100         30 of 30" /tmp/t1.txt
+          make try-cache-keys | tee /tmp/t2.txt
+          grep -q "exact (the code)       6       17%" /tmp/t2.txt
+          make try-related-window | tee /tmp/t3.txt
+          grep -q "72 h                 1" /tmp/t3.txt
+      - name: Use your own data (file checks)
+        run: |
+          uv run --frozen pytest -q tests/test_own_data.py
+          make check-data DIR=data
       - name: Printed install path (pip install -r requirements.txt) and the printed commands
         run: |
           uv venv --seed --python ${{ matrix.python-version }} /tmp/pipenv
@@ -50,3 +78,15 @@ jobs:
           /tmp/pipenv/bin/python main.py --mode graph
           /tmp/pipenv/bin/python main.py --mode retrieval
           /tmp/pipenv/bin/python main.py --mode full
+
+  devcontainer:
+    # Builds .devcontainer/ the way Codespaces does and runs the playbook inside it.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build the devcontainer and run the playbook
+        uses: devcontainers/ci@v0.3
+        with:
+          push: never
+          # make run, timed from a clean container (it starts Neo4j and Redis with Docker-in-Docker)
+          runCmd: start=$(date +%s) && make run && echo "Time to first output in a clean devcontainer was $(( $(date +%s) - start )) s"

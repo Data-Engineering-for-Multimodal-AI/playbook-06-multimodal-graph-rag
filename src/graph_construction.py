@@ -7,12 +7,15 @@ from tqdm import tqdm
 
 import numpy as np
 
-from src.config import (DATA_DIR, EMBEDDINGS_DIR, NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD,
+from src.config import (DATA_DIR, EMBEDDINGS_DIR, data_file, NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD,
                         TEXT_VECTOR_INDEX, IMAGE_VECTOR_INDEX)
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
+# Two incidents on the same asset are RELATED_TO when they are at most this many hours apart
+RELATED_WINDOW_HOURS = 72
 
 class GraphConstructor:
     def __init__(self):
@@ -62,7 +65,7 @@ class GraphConstructor:
         logger.info(f"Loaded {len(self.incidents_df)} incidents")
         
         # Load assets data
-        assets_path = os.path.join(DATA_DIR, "assets (1).csv")
+        assets_path = data_file("assets")
         self.assets_df = pd.read_csv(assets_path)
         logger.info(f"Loaded {len(self.assets_df)} assets")
         
@@ -72,7 +75,7 @@ class GraphConstructor:
         logger.info(f"Loaded {len(self.zones_df)} zones")
         
         # Load technicians data
-        technicians_path = os.path.join(DATA_DIR, "technicians (1).csv")
+        technicians_path = data_file("technicians")
         self.technicians_df = pd.read_csv(technicians_path)
         logger.info(f"Loaded {len(self.technicians_df)} technician assignments")
         
@@ -276,8 +279,8 @@ class GraphConstructor:
                     # Calculate time difference in hours
                     time_diff = (next_time - current_time).total_seconds() / 3600
                     
-                    # If within 72 hours, create a RELATED_TO edge
-                    if time_diff <= 72:
+                    # If within 72 hours (RELATED_WINDOW_HOURS), create a RELATED_TO edge
+                    if time_diff <= RELATED_WINDOW_HOURS:
                         query = """
                         MATCH (i1:Incident {incident_id: $id1}), (i2:Incident {incident_id: $id2})
                         CREATE (i1)-[:RELATED_TO {reason: 'same_asset_time_proximity', time_diff_hours: $time_diff}]->(i2)

@@ -1,13 +1,278 @@
-# Engineering Graph-Augmented Retrieval and Edge-Aware Caching for Multimodal AI
+# Playbook 06: Retrieve past incidents with vectors, a graph and a cache
+**How to build graph-augmented retrieval with edge-aware caching.** Chapter 6 of [*Data Engineering for Multimodal AI*](https://oreil.ly/data-engineering-multimodal) (O'Reilly, 2026), pages 201–216.
 
-**Chapter 6 playbook** from *Data Engineering for Multimodal AI* (O'Reilly, 2026), pages 204–218 (Early Release page numbers; they may differ in the final print).
-Book: https://oreil.ly/data-engineering-multimodal
+An agent triaging a network incident needs similar past incidents, the context around them, and a fast answer the next time it asks. In this repo, we explore this with TelMo, a fictional telecom company, and a synthetic incident dataset. Follow along to combine vector search, metadata filters and a graph, then add a cache that serves repeat questions quickly.
 
-> Want the code exactly as printed? Use the `first-edition` tag. This branch is the 2026 maintenance update; see [Differences from the printed book](#differences-from-the-printed-book).
+**The problem.** A good answer needs similar past cases, the right filters, how those cases relate to each other, and speed, and no single database gives you all four.
 
-## What you'll build
+**What you'll work with.** You'll combine vector search with metadata filters, enrich the results with relationships from a graph, and cache answers close to where they are used.
 
-A hybrid memory system for real-time, context-aware retrieval over a multimodal dataset of telecom infrastructure incidents: 100 incident reports, 20 drone inspection photos, and the assets, zones and technicians they involve. It combines semantic search, a knowledge graph and caching tuned for edge-style workloads.
+> Following the book? Its Steps 1–7 are in [Run it the way the book does](#run-it-the-way-the-book-does) and still work as printed. Want the code exactly as printed? Use the `first-edition` tag. This branch is the 2026 maintenance update; see [Differences from the printed book](#differences-from-the-printed-book).
+
+## Run it
+
+You need [uv](https://docs.astral.sh/uv/), `make` and Docker (for Neo4j and Redis). Or open the repo in a GitHub Codespace, where all of them are ready. On Windows without `make`, use a Codespace or the book's steps below. The times below are from a Mac (Python 3.13) with the two models already downloaded; the first run downloads them from Hugging Face (about 700 MB).
+
+**1. Get the code.**
+
+```bash
+git clone https://github.com/Data-Engineering-for-Multimodal-AI/playbook-06-multimodal-graph-rag.git
+cd playbook-06-multimodal-graph-rag
+```
+
+**2. Start Neo4j and Redis.** Installs the locked dependencies (`uv sync`) and starts Neo4j 2026.10 and Redis 8 with `docker compose up -d --wait`, the same containers as the book's `docker run` commands. If both already answer with the settings in [`.env.example`](.env.example), nothing is started. This took 37 s on a Mac with the images already pulled.
+
+```bash
+make services
+```
+
+You should see both containers become healthy:
+
+```
+ Container 06-multimodal-graph-rag-redis-1  Healthy
+ Container 06-multimodal-graph-rag-neo4j-1  Healthy
+```
+
+If Neo4j or Redis already runs on your machine (`make services` then stops with an `AuthError` or says a port is taken), use other ports in this terminal and the next ones: `export NEO4J_HTTP_PORT=7475 NEO4J_BOLT_PORT=7688 REDIS_PORT=6380 NEO4J_URI=bolt://localhost:7688`.
+
+**3. Build the graph and run the pipeline.** Runs the book's modes in order: `python main.py --mode embeddings`, `graph`, `retrieval`, `photos`, `cache` and `full`. It embeds the 100 incidents and 20 drone photos, builds the Neo4j graph with the embeddings on the nodes, and runs a filtered search, a photo search and the cache. This took 1 min 55 s on a Mac. Like `--mode graph`, it replaces everything in the Neo4j database it connects to.
+
+```bash
+make run
+```
+
+You should see the three Zone 11 results for "Packet loss observed on Tower", then the cache at the end:
+
+```
+Result 1:
+Incident ID: INC903
+Description: Packet loss observed on Tower T93. Issue reported by monitoring system.
+Similarity Score: 0.7607
+...
+Query: Tower packet loss
+Cache hit: True
+Retrieval time: 6.02 ms
+```
+
+The first `Tower packet loss` query of a fresh Redis is a miss (2233.88 ms on a Mac); the second is answered from Redis in about 6 ms. Within 12 hours both are hits.
+
+**4. Search it yourself.** Describe an incident, optionally with a zone and a priority. The search goes through the cache, like `--mode full`.
+
+```bash
+make search Q="router keeps rebooting after a firmware update" PRIORITY=High
+```
+
+```
+Incidents like 'router keeps rebooting after a firmware update' (priority High):
+  0.6947  INC957  Zone 11  High   Open     Firmware update failure observed on Router R57. ...
+  0.5606  INC990  Zone 12  High   Open     Firmware update failure observed on Repeater R63. ...
+  0.5202  INC947  Zone 12  High   Resolved Firmware update failure observed on Tower T95. ...
+          fixed by Tech_120
+  ...
+Cache miss, 3044 ms
+```
+
+Run the same command again and the last line is `Cache hit, 17 ms`. Each result shows the graph context: the technician from `RESOLVED_BY`, the photo from `HAS_IMAGE` and related incidents from `RELATED_TO`. Find drone photos from a description or from another photo:
+
+```bash
+make photos Q="water pooling around the tower base"
+make photos IMAGE=data/drone-images/INC917_tower_overgrown_branches_zone14.jpeg
+```
+
+```
+Drone photos matching data/drone-images/INC917_tower_overgrown_branches_zone14.jpeg:
+  1.0000  INC917_tower_overgrown_branches_zone14.jpeg  (INC917, Open)
+  0.8963  INC900_tower_forest_inspection.jpeg  (INC900, Resolved)
+  0.8837  INC912_tower_forest_canopy_obstructed.jpeg  (INC912, Resolved)
+  ...
+```
+
+The photo finds itself first, then the other forest towers. Add `ZONE="Zone 12"` to a search, or try your own descriptions.
+
+**5. Open the UI.** Starts the Streamlit app (`python main.py --mode app`) on http://127.0.0.1:8501, with the incident search, the graph view and search by photo. Stop it with Ctrl+C.
+
+```bash
+make serve
+```
+
+```
+  You can now view your Streamlit app in your browser.
+
+  URL: http://127.0.0.1:8501
+```
+
+**6. Clean up.**
+
+```bash
+make services-stop
+make clean
+```
+
+`make services-stop` stops and removes the two containers (`docker compose down`); after the next `make services`, run `make run` again before searching. `make clean` deletes the generated embeddings in `embeddings/` and the test cache. The models stay in the Hugging Face cache.
+
+## How much time do you have?
+
+| Time | What to do |
+|---|---|
+| 15 minutes | [Run it](#run-it), steps 1 to 4. On a Mac, step 2 took 37 s and step 3 took 1 min 55 s. |
+| 1 hour | The three [Try this](#try-this) experiments (under 20 s each, no Docker), then your own searches and the UI. |
+| 1 day | [Use your own data](#use-your-own-data): build the graph from your own incidents and photos, then work through [Before production](#before-production). |
+
+## Try this
+
+Each experiment changes one thing and measures the effect. None needs Docker. The numbers below are from a Mac on 2026-11-21; yours will differ.
+
+**1. How many vector candidates does a filtered search need?** `semantic_search()` asks the vector index for the nearest incidents first and applies the zone and priority filters after. This repeats those steps in NumPy for six filtered searches and compares each answer with filtering first.
+
+```bash
+make try-filter-candidates
+```
+
+```
+candidates  results returned  same as filtering first
+         5          2 of 30                       7%
+        10          5 of 30                      17%
+        20         19 of 30                      63%
+        50         27 of 30                      90%
+       100         30 of 30                     100%
+
+Scoring every vector instead (the exact answer) at larger sizes, in NumPy:
+        100 incidents:     0.01 ms per query
+     10,000 incidents:     1.36 ms per query
+  1,000,000 incidents:   483.66 ms per query
+```
+
+The code asks for 100 candidates, which is every incident in the sample, so its answers are exact. With 10 candidates, the same filtered searches return 5 results out of 30. On a real incident history, the candidate count has to grow with how selective the filters are. Change `QUERIES` in `experiments/filter_candidates.py` to try other filters.
+
+**2. How often does the cache hit when people phrase a question differently?** The cache key is an MD5 of the exact query text and filters. This replays 36 questions (6 questions, each asked 6 ways: repeated, in lower case, with extra spaces or punctuation, and reworded) through the code's key and three alternatives.
+
+```bash
+make try-cache-keys
+```
+
+```
+key rule            hits  hit rate  wrong hits
+exact (the code)       6       17%           0
+normalized            19       53%           3
+semantic >= 0.95      21       58%           3
+semantic >= 0.90      24       67%           5
+semantic >= 0.80      27       75%           7
+semantic >= 0.70      30       83%          10
+```
+
+Only exact repeats hit the code's cache. Lowercasing and removing punctuation and extra spaces triples the hit rate. A "wrong hit" returns top 5 incidents that a fresh search for that exact wording would not: matching questions by embedding gets more hits and more wrong answers as the threshold drops. Change `normalize()` or the thresholds and run it again.
+
+**3. How wide should the RELATED_TO window be?** Two incidents on the same asset get a `RELATED_TO` edge when they are at most 72 hours apart (`RELATED_WINDOW_HOURS` in `src/graph_construction.py`). This runs the code's `create_related_incident_edges()` with other windows and counts the edges instead of writing them.
+
+```bash
+make try-related-window
+```
+
+```
+100 incidents on 79 asset IDs; 17 IDs have more than one incident
+
+  window  RELATED_TO edges  incidents with a related one  median gap  edges across two assets
+    24 h                 1                             2    0.4 days                        1
+    72 h                 1                             2    0.4 days                        1
+     7 d                 2                             4    3.0 days                        2
+    30 d                18                            29   16.9 days                       16
+    90 d                25                            38   23.3 days                       21
+```
+
+With the 72-hour window, 2 of the 100 incidents have a related incident, so the graph adds little context here. A wider window links more of them, but most edges join two different assets: the code groups incidents by `asset_id` alone, and the sample reuses IDs (R96 is a Router in Zone 11, a Router in Zone 14 and a Repeater in Zone 14). Group by `asset_id`, `asset_type` and `zone` together and run it again.
+
+## Use your own data
+
+Put your incidents in a folder with the same files as `data/`:
+
+```
+my_incidents/
+  incidents.csv     incident_id, description, zone, asset_type, asset_id, timestamp,
+                    priority, status, resolution_summary   (timestamp as 2026-03-02T07:15:00)
+  assets.csv        asset_id, asset_name, asset_type, zone_id
+  zones.csv         zone_id, region, supervisor
+  technicians.csv   incident_id, technician_id              (who resolved what)
+  images.csv        incident_id, image_filename, caption    (one photo per incident)
+  drone-images/     the photos images.csv names: .jpg .jpeg .png
+```
+
+The files are UTF-8 CSV with a header row. `assets (1).csv` and `technicians (1).csv`, the sample names, work too. Check the folder first. This reads every file and writes nothing:
+
+```bash
+make check-data DIR=my_incidents
+```
+
+```
+my_incidents: 10 incidents, 6 assets, 2 zones, 7 technician links, 3 photos. All checks passed.
+```
+
+It reports every problem with the file and the reason, and stops before anything is written. These are from a copy of that folder with mistakes put in on purpose:
+
+```
+8 problem(s) in broken; nothing was written:
+  technicians.csv: not UTF-8 text (byte 39)
+  incidents.csv line 10: duplicate incident_id N107
+  incidents.csv line 4: timestamp '05/03/2026 15:10' is not YYYY-MM-DDTHH:MM:SS
+  incidents.csv line 7: zone 'Valley' is not in zones.csv
+  incidents.csv line 7: asset P4 (Repeater, Valley) is not in assets.csv
+  images.csv line 5: second photo for N106 (one photo per incident)
+  drone-images/n109_vegetation.jpeg: Git LFS pointer, not the photo (run git lfs pull)
+  drone-images/n106_second.png: listed in images.csv line 5 but not found
+```
+
+It also checks for missing files and columns, empty IDs and descriptions, technicians and photos for incidents that don't exist, and photos that won't open or are smaller than 32x32. An unknown zone or asset would not stop the graph step: the incident would be stored without its `OCCURRED_IN` or `AFFECTS` edge. When everything passes, build the graph from it (Neo4j and Redis running) and search it:
+
+```bash
+make load DIR=my_incidents
+make search Q="storm knocked out power at the tower"
+```
+
+```
+Loaded 10 incidents and 3 photos. Search them with make search Q="..." (use make run to go back to the samples).
+...
+Incidents like 'storm knocked out power at the tower':
+  0.7826  N101  Harbor   High   Resolved Tower T7 lost power during the storm.
+          fixed by Tech_A
+```
+
+`make load` runs `python main.py --mode embeddings` and `--mode graph` with `DATA_DIR` set to your folder (22 s for this folder on a Mac), then deletes this playbook's cached answers in Redis, which describe the old graph. Like `--mode graph`, it replaces everything in the Neo4j database. `make run` puts the samples back.
+
+## What you end up with
+
+A Neo4j graph of your incidents, assets, zones, technicians and photos, with vector indexes on the text and photo embeddings, a Redis cache in front of it, and a search you can run from the command line or the UI.
+
+Skills you'll practice:
+- Embedding text and photos with two models and storing the vectors on graph nodes
+- Combining vector search with structured filters in one query, and seeing what post-filtering loses
+- Adding graph context (who fixed it, what else broke nearby) to search results
+- Designing cache keys and TTLs, and measuring the hit rate they give
+- Checking incident data for the mistakes that silently drop graph edges
+
+## Before production
+
+This playbook runs on one machine with 100 sample incidents. Before you run something like it for real:
+
+1. **Size the vector search for the filters.** `semantic_search()` asks the index for `max(top_k, 100)` candidates and filters afterwards, which is exact only because the sample has 100 incidents. With 10 candidates, six filtered searches returned 5 of 30 results ([Try this 1](#try-this)). Raise the candidate count with the filter's selectivity, or filter inside the index. *Chapter 6, "Hybrid Storage and Retrieval" (page 189); Chapter 6, "Vector Databases" (page 180).*
+2. **Put everything that changes the answer in the cache key.** The key covers the query and filters but not `top_k`: after `--mode full` cached 3 results, `make search Q="Tower packet loss" ZONE="Zone 11"` asked for 5 and got the 3 from the cache. *Chapter 6, "Caching Design Decisions" (page 199).*
+3. **Invalidate the cache when the graph changes.** `--mode graph` rebuilds the graph but leaves the cache: after a rebuild, `--mode full` returned answers cached 491 s earlier, from the old graph. `make load` deletes the cached answers; a production rebuild should too, or version the keys. *Chapter 6, "Dynamic Caching" (page 196).*
+4. **Normalize queries before they become keys.** Only exact repeats hit the cache: 17% of 36 rephrased questions, against 53% after lowercasing and removing punctuation ([Try this 2](#try-this)). *Chapter 6, "Caching Strategies and Inference on the Edge" (page 193).*
+5. **Link incidents on the physical asset.** `RELATED_TO` groups incidents by `asset_id` alone, while Asset nodes are keyed on ID, type and zone. With a 30-day window, 16 of 18 edges joined two different assets ([Try this 3](#try-this)). *Chapter 6, "Graph Databases and Knowledge Graphs" (page 184).*
+6. **Validate data where it enters.** The graph step creates an incident even when its zone or asset doesn't exist, and silently skips the edge. `make check-data` catches this for a folder; a production loader should reject or quarantine such rows. *Chapter 4, "Validation, Transformation, Observability, and Annotation Across Modalities" (page 119).*
+7. **Update the graph instead of replacing it.** `--mode graph` deletes every node (`MATCH (n) DETACH DELETE n`) and writes one row per Cypher call; it took 22 s for 100 incidents on a Mac. Load new incidents with `MERGE` in batches (`UNWIND`), so the graph stays available. *Chapter 8, "Continuous Data Integration for Multimodal Systems" (page 282).*
+8. **Record which model made each vector.** The vector indexes store only the dimensions (384 and 512). Store the model name and version with the embeddings, so a model change means a planned re-embed. *Chapter 8, "Data Versioning and Experiment Tracking for Multimodal AI" (page 276).*
+9. **Lock down the services.** Neo4j uses the placeholder password `changeThisPassword`, Redis has no password, and both publish their ports on every interface in `docker-compose.yml`. *Chapter 11, "Protecting Data Across the Pipeline" (page 421).*
+10. **Watch the cache and the search.** Track hit rate, retrieval time and cache age, which `--mode full` prints once but nothing records. *Chapter 2, "Monitoring and Observability" (page 53).*
+
+## What it costs
+
+| Where you run it | Cost |
+|---|---|
+| Your machine | $0. Everything runs locally: no API keys, no paid services. About 3.5 GB of disk on a Mac: 1.2 GB for the environment, 1.2 GB for the two models in the Hugging Face cache, and 1.3 GB for the Neo4j and Redis images. |
+| A GitHub Codespace (4 cores, 16 GB, the size this repo asks for) | Estimated $0.36 per hour at GitHub's list price (November 2026). A free personal account includes 120 core-hours a month, about 30 hours on this machine. In CI, `make run` in a clean devcontainer (starting Neo4j and Redis included) took 87 s; the whole job, with the container build, took 3 to 5 minutes. |
+
+## How it works
+
+The sample data is 100 incident reports, 20 drone inspection photos, and the assets, zones and technicians they involve.
 
 - **Multimodal embeddings**: sentence embeddings (all-MiniLM-L6-v2) for incident descriptions and CLIP embeddings for drone photos
 - **Knowledge graph in Neo4j**: incidents, assets, zones, technicians and images, with the embeddings stored on the nodes and indexed for vector search
@@ -20,7 +285,9 @@ A hybrid memory system for real-time, context-aware retrieval over a multimodal 
 
 Everything runs on a laptop CPU with the bundled sample data. Neo4j and Redis run locally (installed, or in Docker). The first run downloads the two models from Hugging Face (about 700 MB).
 
-## Quick start
+## Run it the way the book does
+
+These are the book's Steps 1–7 (pages 204–211), with the fixes listed in [Differences from the printed book](#differences-from-the-printed-book).
 
 You need Python 3.12 or newer, about 2 GB of disk space (1.4 GB for the environment, 0.7 GB for the models), and Neo4j 2026.x and Redis running locally.
 
@@ -65,6 +332,8 @@ python main.py --mode app          # Streamlit UI at http://127.0.0.1:8501
 ```bash
 make smoke        # or: uv run pytest -q
 ```
+
+- `make services`, `make run`, `make search`, `make photos` and `make serve`: see [Run it](#run-it). `make check-data` and `make load`: see [Use your own data](#use-your-own-data). `make try-*`: see [Try this](#try-this).
 
 The smoke tests check the data, packaging, embeddings, graph, vector search and filters, photo search, cache, the five alternative graph models and the UI (about 3 minutes). The Neo4j and Redis tests are skipped if the services aren't running. GitHub Actions runs everything on Python 3.12 and 3.13 with Neo4j 2026.10 and Redis 8, plus the printed `pip install -r requirements.txt` path.
 
@@ -145,6 +414,8 @@ See [src/alternative_graph_models/README.md](src/alternative_graph_models/README
 | `REDIS_PORT` | `6379` |
 | `REDIS_DB` | `0` |
 | `HOST` | `127.0.0.1` (the address the Streamlit UI listens on) |
+| `DATA_DIR` | `data` (the folder the embeddings and graph steps read; `make load DIR=...` sets it) |
+| `NEO4J_HTTP_PORT`, `NEO4J_BOLT_PORT` | `7474`, `7687` (host ports `docker-compose.yml` publishes; Redis uses `REDIS_PORT`) |
 
 ## Tested on
 
@@ -179,7 +450,7 @@ The "First edition" column is the code at the `first-edition` tag, which the boo
 | Cache expiry | An entry whose results had expired still counted as a hit, with fewer or no results | It counts as a miss | Bug |
 | Clear Cache (UI) | Erased the whole Redis database (`FLUSHDB`) | Deletes this system's keys only | It could erase other data in the same Redis |
 | `redis` calls | `setex` | `set(..., ex=...)` | `setex` is deprecated in redis-py 8 |
-| Streamlit UI | `streamlit run` from the shell, listening on every network interface | The book's `python -m streamlit run src/streamlit_app.py` (page 214) or `python main.py --mode app`, on 127.0.0.1 (`.streamlit/config.toml`; `HOST` with `--mode app`) | Works without the venv on PATH; local by default |
+| Streamlit UI | `streamlit run` from the shell, listening on every network interface | The book's `python -m streamlit run src/streamlit_app.py` (page 211) or `python main.py --mode app`, on 127.0.0.1 (`.streamlit/config.toml`; `HOST` with `--mode app`) | Works without the venv on PATH; local by default |
 | `--mode` choices | embeddings, graph, retrieval, cache, full, app, all | Same, plus `photos` | New photo search |
 | `data/logs.jsonl` | Python dict reprs (not JSON) | JSON Lines, same records | Valid JSON |
 | `data/multimodal_image_features.json` | Absolute paths from the author's computer | Paths relative to the repository | Portable, no personal paths |
@@ -319,7 +590,7 @@ Run it again within 12 hours and both queries are cache hits.
 
 ## Troubleshooting
 
-- **`Failed to connect to Neo4j` or `Connection refused` on port 6379**: start Neo4j and Redis first (see the Quick start), and check the connection settings.
+- **`Failed to connect to Neo4j` or `Connection refused` on port 6379**: start Neo4j and Redis first (`make services`, or see [Run it the way the book does](#run-it-the-way-the-book-does)), and check the connection settings.
 - **A Cypher syntax error at `SEARCH`**: the Neo4j server is too old for the vector `SEARCH` clause. Use 2026.x.
 - **`... not found: run python main.py --mode embeddings first`**: the graph step stores the embeddings on the nodes, so run the embeddings step before it.
 - **Neo4j authentication failure**: set `NEO4J_PASSWORD` (and `NEO4J_USER`) to your database's credentials.
@@ -350,12 +621,20 @@ Run it again within 12 hours and both queries are cache hits.
 │   ├── retrieval_system.py     # Retrieval with caching
 │   ├── streamlit_app.py        # Web interface
 │   └── alternative_graph_models/
-├── tests/test_smoke.py
+├── scripts/
+│   ├── check_services.py       # make services: are Neo4j and Redis answering?
+│   ├── search.py               # make search, make photos: search by hand through the cache
+│   └── own_data.py             # make check-data, make load: check your own folder and build the graph
+├── experiments/                # make try-*: the three Try this experiments
+├── tests/
+│   ├── test_smoke.py           # make smoke
+│   └── test_own_data.py        # checks for make check-data
 ├── main.py                     # Entry point (--mode ...)
 ├── pyproject.toml, uv.lock     # Dependencies and lock file
 ├── requirements.txt            # Pinned, exported from uv.lock
 ├── .env.example
-├── Makefile
+├── docker-compose.yml          # Neo4j and Redis for make services
+├── Makefile                    # make services, run, search, photos, serve, check-data, load, try-*, smoke, clean
 ├── CHANGELOG.md
 └── LICENSE                     # MIT
 ```
@@ -366,6 +645,8 @@ Run it again within 12 hours and both queries are cache hits.
 - Graph functionality provided by Neo4j
 - Caching functionality provided by Redis
 - UI powered by Streamlit
+
+If this playbook helped you, a star helps other readers find it.
 
 ## License
 

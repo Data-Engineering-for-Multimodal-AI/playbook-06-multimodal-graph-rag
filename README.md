@@ -646,6 +646,8 @@ Run it again within 12 hours and both queries are cache hits.
 - Caching functionality provided by Redis
 - UI powered by Streamlit
 
+If this playbook helped you, a star helps other readers find it.
+
 ## License
 
 This project is licensed under the MIT License; see the [LICENSE](LICENSE) file for details.

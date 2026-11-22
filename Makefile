@@ -8,6 +8,9 @@
 setup:
 	uv sync --frozen
 
+# In a fresh Codespace the Docker daemon can take a little while to start: wait up to 2 minutes.
+WAIT_FOR_DOCKER := (for i in $$(seq 24); do if docker info >/dev/null 2>&1; then exit 0; fi; sleep 5; done; exit 1)
+
 # Make sure Neo4j and Redis are running. If they already answer (started with the README's
 # docker run commands, installed locally, or as CI service containers), nothing is started.
 # If neither is running, they are started with docker-compose.yml, and this waits until both
@@ -16,7 +19,7 @@ services: setup
 	@uv run --frozen python scripts/check_services.py; status=$$?; \
 	if [ $$status -eq 0 ]; then :; \
 	elif [ $$status -ne 1 ]; then exit $$status; \
-	elif command -v docker >/dev/null 2>&1 && docker info >/dev/null 2>&1; then \
+	elif command -v docker >/dev/null 2>&1 && $(WAIT_FOR_DOCKER); then \
 		echo "Starting Neo4j and Redis with docker compose (docker-compose.yml)..."; \
 		docker compose up -d --wait --wait-timeout 300; \
 	else \

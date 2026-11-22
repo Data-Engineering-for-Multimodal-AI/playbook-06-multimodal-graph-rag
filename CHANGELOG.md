@@ -20,6 +20,7 @@ Nothing the book shows has changed.
   Neo4j or Redis was not reachable. It now prints one line saying how many were skipped and why.
 
 ### Changed
+- README opening: a title that says what you'll do, three sentences on why, the example and what you'll do, then the data engineering problem and what you'll work with.
 - Book page numbers now match the printed book (they were Early Release page numbers).
 
 ## 2026.10.1 (2026-10-27)

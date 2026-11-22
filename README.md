@@ -1,7 +1,11 @@
-# Engineering Graph-Augmented Retrieval and Edge-Aware Caching for Multimodal AI
+# Playbook 06: Retrieve past incidents with vectors, a graph and a cache
+**How to build graph-augmented retrieval with edge-aware caching.** Chapter 6 of [*Data Engineering for Multimodal AI*](https://oreil.ly/data-engineering-multimodal) (O'Reilly, 2026), pages 201–216.
 
-**Chapter 6 playbook** from *Data Engineering for Multimodal AI* (O'Reilly, 2026), pages 201–216.
-Book: https://oreil.ly/data-engineering-multimodal
+An agent triaging a network incident needs similar past incidents, the context around them, and a fast answer the next time it asks. In this repo, we explore this with TelMo, a fictional telecom company, and a synthetic incident dataset. Follow along to combine vector search, metadata filters and a graph, then add a cache that serves repeat questions quickly.
+
+**The problem.** A good answer needs similar past cases, the right filters, how those cases relate to each other, and speed, and no single database gives you all four.
+
+**What you'll work with.** You'll combine vector search with metadata filters, enrich the results with relationships from a graph, and cache answers close to where they are used.
 
 > Want the code exactly as printed? Use the `first-edition` tag. This branch is the 2026 maintenance update; see [Differences from the printed book](#differences-from-the-printed-book).
 

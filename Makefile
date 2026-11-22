@@ -1,5 +1,8 @@
 .PHONY: setup services services-stop run serve smoke clean
 
+# A bare `make` runs the smoke test, as it did before the uniform targets were added.
+.DEFAULT_GOAL := smoke
+
 # Uniform targets for The Playbooks. The book's commands (pip install -r requirements.txt,
 # the docker run commands for Neo4j and Redis in the README, python main.py --mode ...,
 # python -m streamlit run src/streamlit_app.py) still work as printed.

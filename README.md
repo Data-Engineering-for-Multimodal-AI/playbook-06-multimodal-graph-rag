@@ -1,6 +1,6 @@
 # Engineering Graph-Augmented Retrieval and Edge-Aware Caching for Multimodal AI
 
-**Chapter 6 playbook** from *Data Engineering for Multimodal AI* (O'Reilly, 2026), pages 204–218 (Early Release page numbers; they may differ in the final print).
+**Chapter 6 playbook** from *Data Engineering for Multimodal AI* (O'Reilly, 2026), pages 201–216.
 Book: https://oreil.ly/data-engineering-multimodal
 
 > Want the code exactly as printed? Use the `first-edition` tag. This branch is the 2026 maintenance update; see [Differences from the printed book](#differences-from-the-printed-book).
@@ -179,7 +179,7 @@ The "First edition" column is the code at the `first-edition` tag, which the boo
 | Cache expiry | An entry whose results had expired still counted as a hit, with fewer or no results | It counts as a miss | Bug |
 | Clear Cache (UI) | Erased the whole Redis database (`FLUSHDB`) | Deletes this system's keys only | It could erase other data in the same Redis |
 | `redis` calls | `setex` | `set(..., ex=...)` | `setex` is deprecated in redis-py 8 |
-| Streamlit UI | `streamlit run` from the shell, listening on every network interface | The book's `python -m streamlit run src/streamlit_app.py` (page 214) or `python main.py --mode app`, on 127.0.0.1 (`.streamlit/config.toml`; `HOST` with `--mode app`) | Works without the venv on PATH; local by default |
+| Streamlit UI | `streamlit run` from the shell, listening on every network interface | The book's `python -m streamlit run src/streamlit_app.py` (page 211) or `python main.py --mode app`, on 127.0.0.1 (`.streamlit/config.toml`; `HOST` with `--mode app`) | Works without the venv on PATH; local by default |
 | `--mode` choices | embeddings, graph, retrieval, cache, full, app, all | Same, plus `photos` | New photo search |
 | `data/logs.jsonl` | Python dict reprs (not JSON) | JSON Lines, same records | Valid JSON |
 | `data/multimodal_image_features.json` | Absolute paths from the author's computer | Paths relative to the repository | Portable, no personal paths |

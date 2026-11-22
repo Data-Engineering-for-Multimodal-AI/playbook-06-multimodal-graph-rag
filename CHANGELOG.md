@@ -19,6 +19,9 @@ Nothing the book shows has changed.
 - `make smoke` reported success without saying that the graph and cache tests were skipped when
   Neo4j or Redis was not reachable. It now prints one line saying how many were skipped and why.
 
+### Changed
+- Book page numbers now match the printed book (they were Early Release page numbers).
+
 ## 2026.10.1 (2026-10-27)
 
 Checked against the book (Early Release, pages 204–218).

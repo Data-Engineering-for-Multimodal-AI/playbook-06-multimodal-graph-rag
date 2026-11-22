@@ -1,5 +1,24 @@
 # Changelog
 
+## Unreleased (v1.1.0)
+
+Nothing the book shows has changed.
+
+### Added
+- `make setup`, `make services`, `make services-stop`, `make run` and `make serve`. `make run`
+  makes sure Neo4j and Redis are running, then runs the modes `embeddings`, `graph`, `retrieval`,
+  `photos`, `cache` and `full` in order. `make serve` starts the Streamlit UI. `make smoke` and
+  `make clean` are unchanged.
+- `docker-compose.yml` with the same Neo4j and Redis as the README's `docker run` commands.
+  `make services` uses it only when neither service is running.
+- `.devcontainer/` so the repo opens in GitHub Codespaces, with Docker-in-Docker for the services.
+- CI: a weekly scheduled run, a `make run` step, and a job that builds the devcontainer and runs
+  `make run` inside it.
+
+### Fixed
+- `make smoke` reported success without saying that the graph and cache tests were skipped when
+  Neo4j or Redis was not reachable. It now prints one line saying how many were skipped and why.
+
 ## 2026.10.1 (2026-10-27)
 
 Checked against the book (Early Release, pages 204–218).

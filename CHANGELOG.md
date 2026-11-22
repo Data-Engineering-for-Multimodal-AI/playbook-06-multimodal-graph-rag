@@ -5,6 +5,20 @@
 Nothing the book shows has changed.
 
 ### Added
+- `make search Q=... [ZONE=...] [PRIORITY=...]` and `make photos Q=...` or `IMAGE=...`: search the
+  graph by hand through the cache (`scripts/search.py`).
+- `make check-data DIR=...` and `make load DIR=...`: check a folder of your own incidents and photos
+  in the layout of `data/`, then build the embeddings and the graph from it (`scripts/own_data.py`,
+  `tests/test_own_data.py`). `DATA_DIR` (default `data`) sets the folder the pipeline reads; a folder
+  of your own may name its files `assets.csv` and `technicians.csv`.
+- Three measured experiments: `make try-filter-candidates`, `make try-cache-keys`,
+  `make try-related-window` (`experiments/`). None needs Docker.
+- `NEO4J_HTTP_PORT`, `NEO4J_BOLT_PORT` and `REDIS_PORT` set the host ports in `docker-compose.yml`
+  (same defaults), for machines that already run Neo4j or Redis.
+- README: numbered Run it steps, time tiers, Try this, Use your own data, What you end up with,
+  Before production, What it costs.
+- CI: the Run it searches, Try this 1-3, the own-data checks, and the time to first output in a
+  clean devcontainer.
 - `make setup`, `make services`, `make services-stop`, `make run` and `make serve`. `make run`
   makes sure Neo4j and Redis are running, then runs the modes `embeddings`, `graph`, `retrieval`,
   `photos`, `cache` and `full` in order. `make serve` starts the Streamlit UI. `make smoke` and
@@ -20,6 +34,10 @@ Nothing the book shows has changed.
   Neo4j or Redis was not reachable. It now prints one line saying how many were skipped and why.
 
 ### Changed
+- README: "What you'll build" is now "How it works", and "Quick start" is now "Run it the way the
+  book does", with the same commands.
+- `src/graph_construction.py`: the 72-hour `RELATED_TO` window is the constant `RELATED_WINDOW_HOURS`
+  (same value).
 - README opening: a title that says what you'll do, three sentences on why, the example and what you'll do, then the data engineering problem and what you'll work with.
 - Book page numbers now match the printed book (they were Early Release page numbers).
 

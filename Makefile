@@ -1,4 +1,4 @@
-.PHONY: setup services services-stop run serve smoke clean
+.PHONY: setup services services-stop run serve search photos check-data load try-filter-candidates try-cache-keys try-related-window smoke clean
 
 # A bare `make` runs the smoke test, as it did before the uniform targets were added.
 .DEFAULT_GOAL := smoke
@@ -52,9 +52,43 @@ run: services
 serve: services
 	uv run --frozen python main.py --mode app
 
+# Search by hand, through the cache (needs the graph from make run). Run one twice: the second is a cache hit.
+#   make search Q="tower packet loss" ZONE="Zone 11" PRIORITY=High
+#   make photos Q="solar panels covered in desert dust"   or   make photos IMAGE=path/to/photo.jpg
+search: services
+	@test -n "$(Q)" || { echo 'Usage: make search Q="a description" [ZONE="Zone 11"] [PRIORITY=High]'; exit 2; }
+	@uv run --frozen python scripts/search.py --query "$(Q)" $(if $(ZONE),--zone "$(ZONE)") $(if $(PRIORITY),--priority "$(PRIORITY)")
+
+photos: services
+	@if [ -n "$(IMAGE)" ]; then uv run --frozen python scripts/search.py --image "$(IMAGE)"; \
+	elif [ -n "$(Q)" ]; then uv run --frozen python scripts/search.py --photos --query "$(Q)"; \
+	else echo 'Usage: make photos Q="a description"  or  make photos IMAGE=path/to/photo.jpg'; exit 2; fi
+
+# Your own incidents, in the layout of data/ (see README, "Use your own data").
+# check-data checks every file and writes nothing; load builds the embeddings and the graph from DIR.
+check-data: setup
+	@test -n "$(DIR)" || { echo "Usage: make check-data DIR=path/to/folder"; exit 2; }
+	@uv run --frozen python scripts/own_data.py --dir "$(DIR)" --check-only
+
+load: services
+	@test -n "$(DIR)" || { echo "Usage: make load DIR=path/to/folder"; exit 2; }
+	@uv run --frozen python scripts/own_data.py --dir "$(DIR)"
+
+# Try this: three measured experiments (see README, "Try this"). No Docker needed.
+try-filter-candidates: setup
+	@uv run --frozen python experiments/filter_candidates.py
+
+try-cache-keys: setup
+	@uv run --frozen python experiments/cache_keys.py
+
+try-related-window: setup
+	@uv run --frozen python experiments/related_window.py
+
 # Smoke tests (CPU, a few minutes). The graph and cache tests need Neo4j 2026.x and Redis running.
 smoke:
 	uv run pytest -q
 
+# Delete the generated embeddings and test caches. Neo4j, Redis and their data are left alone
+# (stop them with make services-stop).
 clean:
 	rm -rf embeddings .pytest_cache

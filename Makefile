@@ -24,6 +24,7 @@ services: setup
 		docker compose up -d --wait --wait-timeout 300; \
 	else \
 		echo "Neo4j and Redis are not running, and Docker is not available."; \
+		if [ -f /tmp/dockerd.log ]; then echo "Last lines of /tmp/dockerd.log:"; tail -n 25 /tmp/dockerd.log; fi; \
 		echo "Start them as the README's Quick start describes, then run this again."; \
 		exit 1; \
 	fi

@@ -1,5 +1,15 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/img/header-dark.png">
+  <img src="docs/img/header-light.png" alt="Playbook 06 of 12, Chapter 6 of Data Engineering for Multimodal AI. Build: graph-augmented retrieval with a cache. Data: incidents, a graph and text." width="100%">
+</picture>
+
 # Playbook 06: Retrieve past incidents with vectors, a graph and a cache
 **How to build graph-augmented retrieval with edge-aware caching.** Chapter 6 of [*Data Engineering for Multimodal AI*](https://oreil.ly/data-engineering-multimodal) (O'Reilly, 2026), pages 201–216.
+
+[![Tests](https://github.com/Data-Engineering-for-Multimodal-AI/playbook-06-multimodal-graph-rag/actions/workflows/smoke.yml/badge.svg?branch=main)](https://github.com/Data-Engineering-for-Multimodal-AI/playbook-06-multimodal-graph-rag/actions/workflows/smoke.yml)
+![Python 3.12 | 3.13](https://img.shields.io/badge/python-3.12%20%7C%203.13-1f1a19?labelColor=6b6361)
+[![License: MIT](https://img.shields.io/badge/license-MIT-1f1a19?labelColor=6b6361)](LICENSE)
+[![Open in GitHub Codespaces](https://img.shields.io/badge/Open%20in-Codespaces-b4422e?logo=github&labelColor=6b6361)](https://codespaces.new/Data-Engineering-for-Multimodal-AI/playbook-06-multimodal-graph-rag?quickstart=1)
 
 An agent triaging a network incident needs similar past incidents, the context around them, and a fast answer the next time it asks. In this repo, we explore this with TelMo, a fictional telecom company, and a synthetic incident dataset. Follow along to combine vector search, metadata filters and a graph, then add a cache that serves repeat questions quickly.
 
@@ -272,6 +282,17 @@ This playbook runs on one machine with 100 sample incidents. Before you run some
 
 ## How it works
 
+```mermaid
+flowchart LR
+  A["Incidents and drone photos<br/>100 reports, 20 images"] --> B["Embeddings<br/>MiniLM for text, CLIP for photos"]
+  B --> C["Knowledge graph<br/>Neo4j with vector indexes"]
+  C --> D["Hybrid retrieval<br/>vector search, filters, graph context"]
+  D --> E["Edge-aware cache<br/>Redis, a TTL per modality"]
+  E --> F["Streamlit UI<br/>search incidents and photos"]
+  classDef key fill:#ffe8e3,stroke:#b4422e,color:#1f1a19
+  class D key
+```
+
 The sample data is 100 incident reports, 20 drone inspection photos, and the assets, zones and technicians they involve.
 
 - **Multimodal embeddings**: sentence embeddings (all-MiniLM-L6-v2) for incident descriptions and CLIP embeddings for drone photos
@@ -469,7 +490,7 @@ Details are in [CHANGELOG.md](CHANGELOG.md).
 
 [data/README.md](data/README.md) lists every file and what uses it.
 
-The full list, with sources, licenses and citations, is in [DATA_LICENSES.md](DATA_LICENSES.md).
+The full list, with sources, licenses and citations, is in [DATA_SOURCES.md](DATA_SOURCES.md).
 
 ## Expected output
 
@@ -653,3 +674,8 @@ If this playbook helped you, a star helps other readers find it.
 ## License
 
 This project is licensed under the MIT License; see the [LICENSE](LICENSE) file for details.
+
+---
+
+[The book](https://oreil.ly/data-engineering-multimodal) · [All playbooks](https://github.com/Data-Engineering-for-Multimodal-AI#playbooks) · Previous: [Playbook 05](https://github.com/Data-Engineering-for-Multimodal-AI/playbook-05-multimodal-feature-engineering) · Next: [Playbook 07](https://github.com/Data-Engineering-for-Multimodal-AI/playbook-07-multimodal-inference-router)
+<!-- Substack post for this playbook: add link here -->

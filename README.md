@@ -469,6 +469,8 @@ Details are in [CHANGELOG.md](CHANGELOG.md).
 
 [data/README.md](data/README.md) lists every file and what uses it.
 
+The full list, with sources, licenses and citations, is in [DATA_LICENSES.md](DATA_LICENSES.md).
+
 ## Expected output
 
 From a fresh clone on 2026-10-23, macOS 26.5.1 (arm64), Python 3.12.15, Neo4j 2026.10.1, Redis 8.10.2. Log lines and progress bars are left out. This is the output of this version; it may differ from the output printed in the book, and that's okay.

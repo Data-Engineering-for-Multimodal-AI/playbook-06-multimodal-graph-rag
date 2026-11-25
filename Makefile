@@ -46,6 +46,7 @@ run: services
 	uv run --frozen python main.py --mode photos
 	uv run --frozen python main.py --mode cache
 	uv run --frozen python main.py --mode full
+	@echo "playbook-06-multimodal-graph-rag" > .playbook-done
 
 # The Streamlit UI on http://127.0.0.1:8501 (set HOST to listen elsewhere). Run `make run` first
 # to build the graph.
